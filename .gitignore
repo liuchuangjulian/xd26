@@ -144,3 +144,5 @@ config.yml
 *.xls
 .claude
 *.jpeg
+*.jpg
+*.png
