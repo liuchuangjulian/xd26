@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 @router_user.post("/login/mp", response_model=LoginResponse)
 async def wechat_mp_login(params: WechatLoginParams = Body(...),
                           use_case: WechatLoginUseCase = Injected(WechatLoginUseCase)):
-    raise FastapiResult({"data": {
-        "token": "7539b33b-a066-4dbc-b90c-f1f038fa429b",
-        "code": "2332055158",
-        "nickname": "会员23320-55158",
-    }})
+    # raise FastapiResult({"data": {
+    #     "token": "7539b33b-a066-4dbc-b90c-f1f038fa429b",
+    #     "code": "2332055158",
+    #     "nickname": "会员23320-55158",
+    # }})
     # 小程序登录
-    # await use_case.execute(params.code)
+    await use_case.execute(params.code)
 '''
  curl -X 'POST' \
   'http://localhost:8080/api/login/mp' \

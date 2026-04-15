@@ -63,7 +63,7 @@ async def save_upload_file(
     filename = f"{user_id}_{unique_str}{ext}"
 
     # 构建完整路径
-    static_path = os.getenv("StaticPath", "/Users/lijusheng/sen_yu/python_codes/xd25_back/src/static")
+    static_path = os.getenv("StaticPath")
     full_dir = os.path.join(static_path, upload_dir, date_str)
     full_path = os.path.join(full_dir, filename)
 
