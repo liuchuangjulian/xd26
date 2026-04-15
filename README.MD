@@ -19,7 +19,7 @@ docker rm $DOCKER_CONTAINER_NAME 2>/dev/null
 
 docker run -d \
 --name=$DOCKER_CONTAINER_NAME \
--v /root/static/xd26/30010:/app/static \
+-v /root/static/xd26:/app/static \
 -v /root/logs/xd26_30010:/logs \
 -p 30010:8080 \
 -e "CONFIG_URL_SET_UP=http://172.31.188.191:23000/config/internal?key=xd26&cache=0" \

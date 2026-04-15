@@ -17,5 +17,5 @@ async def get_products_list(page_params: PageParams = Depends(),
     await use_case.query(params.category_id, params.name, page_size=page_params.page_size, page=page_params.page)
 
 """
-curl -X 'GET' 'http://localhost:8080/api/products/list?page=1&page_size=10&category_id=1' -H 'accept: application/json' | jq .
+curl -X 'GET' 'http://localhost:30010/api/products/list?page=1&page_size=10&category_id=1' -H 'accept: application/json' | jq .
 """
