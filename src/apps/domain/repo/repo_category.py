@@ -25,10 +25,10 @@ class CategoryRepository(BaseRepository):
 
         _, obj_list = await self.get_list(session, Entity=CategoryEntity, equal_maps={"id": 1}, with_total=False)
         if not obj_list:
-            await self.add(session, CategoryEntity(id=1, name="饮料", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=2, name="酒", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=3, name="日化", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=4, name="方便速食", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=5, name="休闲食品", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=6, name="饮用水", show_index=1, extend_property={}))
-            await self.add(session, CategoryEntity(id=7, name="家用", show_index=1, extend_property={}))
+            await self.add(session, CategoryEntity(id=1, name="饮料", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=2, name="酒", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=3, name="日化", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=4, name="方便速食", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=5, name="休闲食品", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=6, name="饮用水", show_index=1, deleted_at=None))
+            await self.add(session, CategoryEntity(id=7, name="家用", show_index=1, deleted_at=None))
