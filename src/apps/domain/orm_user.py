@@ -16,7 +16,7 @@ user_table = Table(
     metadata,
     Column("id", BIGINT(unsigned=True), primary_key=True, autoincrement=True, comment="主键"),
     Column("nickname", String(32), nullable=True, default="", comment="昵称"),
-    Column("code", String(10), nullable=True, default="", comment="会员号"),
+    # Column("code", String(10), nullable=True, default="", comment="会员号"),
     Column("extend_property", JSON, nullable=True, default=None, comment="扩展属性"),
     Column("phone", String(100), nullable=True, default="", comment="加密手机号"),
     Column("wechat_openid", String(100), nullable=True, comment="微信openid"),
