@@ -9,7 +9,6 @@ from js_kits.fastapi_kits.entity_base import Entity
 class User(Entity):
     id: Optional[int]
     nickname: str
-    code: str
     extend_property: Optional[dict]
     phone: str
     wechat_openid: str
@@ -22,15 +21,14 @@ class User(Entity):
     deleted_at: Optional[datetime]
 
     def generate_code_nickname(self):
-        self.code = "".join(random.choice("012356789") for _ in range(10))
-        return f"顾客{self.code [:5]}-{self.code[5:]}"
+        code = "".join(random.choice("012356789") for _ in range(10))
+        return f"顾客{code[:5]}-{code[5:]}"
 
     def user_info_to_dict(self):
         return {
             "avatar": self.avatar,
             "nickname": self.nickname,
             "birthday": self.birthday.strftime("%Y-%m-%d") if self.birthday else "",
-            "code": self.code,
         }
 
     def to_login_result(self, token):
