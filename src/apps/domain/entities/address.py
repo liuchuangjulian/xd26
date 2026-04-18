@@ -12,7 +12,7 @@ class Address(Entity):
     city: str  # 市
     district: str  # 区
     community_name: str  # 海螺花园
-    building_unit_room: str  # 2号楼 1单元 2013室
+    building_unit_room: str  # 门牌地址，如：2号楼 1单元 2013室
     phone: str  # 手机
     name: str  # 联系人
     tag: str  # 家/公司/等
@@ -38,7 +38,7 @@ class Address(Entity):
             "building_unit_room": self.building_unit_room,
             "selected": self.selected,
             "phone": self.phone,
-            "tag": getattr(self, "tag", ""),
+            "tag": self.tag,
         }
         return base
 
