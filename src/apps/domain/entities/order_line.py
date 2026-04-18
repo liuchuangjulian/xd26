@@ -21,25 +21,25 @@ class OrderLineEntity(Entity):
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
 
-    def __init__(self, id=None, name=None, index=None, barcode=None, uid=None,
-                 order_id=None, p_id=None, count=None, price=None, amount=None,
-                 extend_property=None,  created_at=None,
-                 updated_at=None, deleted_at=None, *args, **kwargs):
-        super().__init__()
-        self.id = id
-        self.uid = uid
-        self.order_id = order_id
-        self.p_id = p_id
-        self.count = count
-        self.price = price
-        self.extend_property = extend_property
-        self.name = name
-        self.barcode = barcode
-        self.index = index
-        self.amount = amount if amount else self.price * self.count
-        self.created_at = created_at
-        self.updated_at = updated_at
-        self.deleted_at = deleted_at
+    # def __init__(self, id=None, name=None, index=None, barcode=None, uid=None,
+    #              order_id=None, p_id=None, count=None, price=None, amount=None,
+    #              extend_property=None,  created_at=None,
+    #              updated_at=None, deleted_at=None, *args, **kwargs):
+    #     super().__init__()
+    #     self.id = id
+    #     self.uid = uid
+    #     self.order_id = order_id
+    #     self.p_id = p_id
+    #     self.count = count
+    #     self.price = price
+    #     self.extend_property = extend_property
+    #     self.name = name
+    #     self.barcode = barcode
+    #     self.index = index
+    #     self.amount = amount if amount else self.price * self.count
+    #     self.created_at = created_at
+    #     self.updated_at = updated_at
+    #     self.deleted_at = deleted_at
 
     def to_dict(self):
         base = {
