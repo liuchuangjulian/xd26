@@ -1,10 +1,7 @@
 import logging
 import random
-
 from js_kits.except_kits.except_kits import FastapiResult, ClientError
-
 from apps.domain.entities.config import ConfigEntity
-from apps.domain.repo.repo_coupons import CouponsRepository
 from apps.domain.repo.repo_user import UserRepository
 
 logger = logging.getLogger(__name__)
