@@ -2,8 +2,6 @@ from js_kits.fastapi_kits.repo_base import BaseRepository
 import warnings
 from sqlalchemy import text
 
-from apps.domain.entities.user_membership import UserMembershipEntity
-
 
 class UserMembershipRepository(BaseRepository):
     async def ini(self, session):

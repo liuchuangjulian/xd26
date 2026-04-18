@@ -32,31 +32,42 @@ class MembershipRepository(BaseRepository):
         if not obj_list:
             await self.add(session, MembershipEntity(
                 id=1,
-                name="月度会员",
-                price=29.90,
-                duration=30,
-                description="享受30天会员权益",
+                name="周度体验会员",
+                price=5.99,
+                duration=7,
+                description="可购买3次，试试首选",
                 status=1,
                 show_index=1,
                 extend_property={}
             ))
+
             await self.add(session, MembershipEntity(
                 id=2,
-                name="季度会员",
-                price=79.90,
-                duration=90,
-                description="享受90天会员权益，更划算",
+                name="月度体验会员",
+                price=24.99,
+                duration=30,
+                description="可购买2次，初步体验",
                 status=1,
                 show_index=2,
                 extend_property={}
             ))
             await self.add(session, MembershipEntity(
                 id=3,
-                name="年度会员",
+                name="季度体验会员",
+                price=74.99,
+                duration=90,
+                description="可购买1次，深度体验",
+                status=1,
+                show_index=3,
+                extend_property={}
+            ))
+            await self.add(session, MembershipEntity(
+                id=4,
+                name="年度正式会员",
                 price=299.90,
                 duration=365,
                 description="享受365天会员权益，超值优惠",
                 status=1,
-                show_index=3,
+                show_index=4,
                 extend_property={}
             ))

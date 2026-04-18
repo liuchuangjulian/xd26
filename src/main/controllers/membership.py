@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 @router_membership.get("/list", response_model=MembershipListResponse)
-# @auth
+@auth
 async def get_membership_list(request: Request,
                               redis_client: Redis = Injected(Redis),
                               user_repo: UserRepository = Injected(UserRepository),
