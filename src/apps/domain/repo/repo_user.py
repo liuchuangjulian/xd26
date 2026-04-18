@@ -72,16 +72,16 @@ class UserRepository(BaseRepository):
             await session.execute(text(create_user_sql), execution_options={"warning": False})
             await session.execute(text(create_user_token_sql), execution_options={"warning": False})
 
-        _, obj_list = await self.get_list(session, Entity=User, equal_maps={"id": 1}, with_total=False)
-        if not obj_list:
-            await self.add(session, User(id=1,
-                                         nickname="会员23320-55158",
-                                         extend_property={},
-                                         phone="",
-                                         wechat_openid="-",
-                                         black=0,
-                                         avatar="",))
-            await self.add(session, UserToken(id=1,
-                                              uid=1,
-                                              token="7539b33b-a066-4dbc-b90c-f1f038fa429b",
-                                              expired_at=datetime.datetime.now()+datetime.timedelta(days=365),))
+        # _, obj_list = await self.get_list(session, Entity=User, equal_maps={"id": 1}, with_total=False)
+        # if not obj_list:
+        #     await self.add(session, User(id=1,
+        #                                  nickname="会员23320-55158",
+        #                                  extend_property={},
+        #                                  phone="",
+        #                                  wechat_openid="-",
+        #                                  black=0,
+        #                                  avatar="",))
+        #     await self.add(session, UserToken(id=1,
+        #                                       uid=1,
+        #                                       token="7539b33b-a066-4dbc-b90c-f1f038fa429b",
+        #                                       expired_at=datetime.datetime.now()+datetime.timedelta(days=365),))
