@@ -5,6 +5,9 @@ from apps.domain.entities.base import Entity
 
 
 class RedemptionCard(Entity):
+    """
+    兑换卡
+    """
     id: Optional[int]
     card_number: str
     amount: Decimal
@@ -16,17 +19,6 @@ class RedemptionCard(Entity):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "card_number": self.card_number,
-            "amount": float(self.amount),
-            "status": self.status,
-            "expired_at": self.expired_at.strftime("%Y-%m-%d %H:%M:%S") if self.expired_at else None,
-            "used_at": self.used_at.strftime("%Y-%m-%d %H:%M:%S") if self.used_at else None,
-            "used_by": self.used_by,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else None,
-        }
 
     def is_valid(self):
         """检查兑换卡是否有效"""

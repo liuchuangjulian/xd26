@@ -5,6 +5,9 @@ from apps.domain.entities.base import Entity
 
 
 class RedemptionHistory(Entity):
+    """
+    兑换记录
+    """
     id: int
     uid: int
     card_number: str
@@ -15,11 +18,6 @@ class RedemptionHistory(Entity):
     updated_at: Optional[datetime.datetime]
     deleted_at: Optional[datetime.datetime]
 
-    # def __init__(self, *args, **kwargs):
-    #     _annotations_dict = getattr(self, "__annotations__")
-    #     for kwarg, value in kwargs.items():
-    #         if kwarg in _annotations_dict:
-    #             setattr(self, kwarg, value)
 
     def to_dict(self):
         return {
