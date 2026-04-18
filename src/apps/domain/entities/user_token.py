@@ -11,16 +11,13 @@ class UserToken(Entity):
     uid: int
     token: str
     expired_at: datetime
-    deleted_at: datetime
+    deleted_at: Optional[datetime]
 
-    # def __init__(self, token: Optional[str] = None,
-    #              expired_at: Optional[datetime] = None, *args, **kwargs):
-    #     _annotations_dict = getattr(self, "__annotations__")
-    #     for kwarg, value in kwargs.items():
-    #         if kwarg in _annotations_dict:
-    #             setattr(self, kwarg, value)
-    #     self.token = token if token else str(uuid4())
-    #     self.expired_at = expired_at if expired_at else datetime.now() + timedelta(seconds=Token_OUT)
+    def __init__(self, token: Optional[str] = None,
+                 expired_at: Optional[datetime] = None, *args, **kwargs):
+        super().__init__()
+        self.token = token if token else str(uuid4())
+        self.expired_at = expired_at if expired_at else datetime.now() + timedelta(seconds=Token_OUT)
 
     def is_valid(self):
         if self.expired_at > datetime.now():
