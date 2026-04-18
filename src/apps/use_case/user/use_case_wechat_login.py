@@ -49,6 +49,5 @@ class WechatLoginUseCase:
                 await self.repo.add(session, obj_user)
             logger.info(f"obj_user.id: {obj_user.id}")
             user_token_obj = UserToken(uid=obj_user.id)
-            print(user_token_obj.to_dict())
             await self.repo.add(session, user_token_obj)
             raise FastapiResult({"data": obj_user.to_login_result(user_token_obj.token)})
