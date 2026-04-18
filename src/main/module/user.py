@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from apps.domain.entities.user import User
 from js_kits.fastapi_kits.async_injection_provider import async_provider
 from apps.domain.repo.repo_user import UserRepository
+from apps.domain.repo.repo_user_membership import UserMembershipRepository
 from apps.use_case.user.query_user_info import QueryUserInfo
 from apps.use_case.user.use_case_change_user_info import UseCaseChangeUserInfo
 from apps.use_case.user.use_case_wechat_login import WechatLoginUseCase
@@ -16,8 +17,8 @@ class UserModule(injector.Module):
         return UserRepository(session, redis_client, User)
 
     @async_provider
-    async def provide_query_user_info(self, repo: UserRepository) -> QueryUserInfo:
-        return QueryUserInfo(repo)
+    async def provide_query_user_info(self, repo: UserRepository, user_membership_repo: UserMembershipRepository) -> QueryUserInfo:
+        return QueryUserInfo(repo, user_membership_repo)
 
     @async_provider
     async def provide_use_change_user_info(self, repo: UserRepository) -> UseCaseChangeUserInfo:

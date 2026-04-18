@@ -21,6 +21,7 @@ class UserInfoData(BaseModel):
     birthday: str = AutoTitleField(..., description="用户生日")
     code: str = AutoTitleField(..., description="会员号")
     wechat_id: str = AutoTitleField(..., description="微信ID")
+    is_member: bool = AutoTitleField(..., description="是否是会员")
 
 
 class UserInfoResponse(BaseModel):
