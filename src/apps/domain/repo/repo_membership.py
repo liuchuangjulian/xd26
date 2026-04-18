@@ -16,6 +16,7 @@ class MembershipRepository(BaseRepository):
                   `description` varchar(512) DEFAULT NULL COMMENT '描述',
                   `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态：1-启用，0-禁用',
                   `show_index` int DEFAULT NULL COMMENT '展示序号',
+                  `max_purchase_count` int NOT NULL DEFAULT 0 COMMENT '最大购买数量，-1表示无限制',
                   `extend_property` json DEFAULT NULL COMMENT '扩展数据',
                   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据更新时间',
@@ -38,6 +39,7 @@ class MembershipRepository(BaseRepository):
                 description="可购买3次，试试首选",
                 status=1,
                 show_index=1,
+                max_purchase_count=3,
                 extend_property={}
             ))
 
@@ -49,6 +51,7 @@ class MembershipRepository(BaseRepository):
                 description="可购买2次，初步体验",
                 status=1,
                 show_index=2,
+                max_purchase_count=2,
                 extend_property={}
             ))
             await self.add(session, MembershipEntity(
@@ -59,6 +62,7 @@ class MembershipRepository(BaseRepository):
                 description="可购买1次，深度体验",
                 status=1,
                 show_index=3,
+                max_purchase_count=1,
                 extend_property={}
             ))
             await self.add(session, MembershipEntity(
@@ -69,5 +73,6 @@ class MembershipRepository(BaseRepository):
                 description="享受365天会员权益，超值优惠",
                 status=1,
                 show_index=4,
+                max_purchase_count=-1,
                 extend_property={}
             ))

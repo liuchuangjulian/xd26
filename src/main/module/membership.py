@@ -16,8 +16,8 @@ class MembershipModule(injector.Module):
         return MembershipRepository(session=session, Entity=MembershipEntity)
 
     @async_provider
-    async def get_query_membership(self, repo: MembershipRepository) -> QueryMembership:
-        return QueryMembership(repo)
+    async def get_query_membership(self, repo: MembershipRepository, user_membership_repo: UserMembershipRepository) -> QueryMembership:
+        return QueryMembership(repo, user_membership_repo)
 
     @async_provider
     async def get_user_membership_repository(self, session: AsyncSession) -> UserMembershipRepository:

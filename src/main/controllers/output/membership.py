@@ -9,6 +9,9 @@ class MembershipItem(BaseModel):
     price: float = AutoTitleField(..., description="价格")
     duration: int = AutoTitleField(..., description="有效期（天）")
     description: str = AutoTitleField(..., description="描述")
+    status: int = AutoTitleField(..., description="状态：1-可用，0-不可用")
+    max_purchase_count: int = AutoTitleField(..., description="最大购买数量，0表示无限制")
+    purchased_count: int = AutoTitleField(..., description="已购买数量")
 
 
 class MembershipListResponse(BaseModel):
