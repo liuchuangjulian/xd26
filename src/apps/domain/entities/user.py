@@ -2,8 +2,7 @@ from datetime import datetime, timedelta, date
 from typing import Optional, List, Dict
 from decimal import Decimal
 import random
-from js_kits.fastapi_kits.entity_base import Entity
-
+from apps.domain.entities.base import Entity
 
 
 class User(Entity):

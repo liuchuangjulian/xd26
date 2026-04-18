@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from typing import Optional
 from decimal import Decimal
-from js_kits.fastapi_kits.entity_base import Entity
+from apps.domain.entities.base import Entity
 
 
 class RedemptionCard(Entity):

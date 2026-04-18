@@ -1,5 +1,5 @@
 import enum
-from js_kits.fastapi_kits.entity_base import Entity
+from apps.domain.entities.base import Entity
 from sqlalchemy import DateTime
 from sqlalchemy.orm.attributes import flag_modified
 

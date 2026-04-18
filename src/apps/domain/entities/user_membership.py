@@ -1,5 +1,5 @@
 import datetime
-from js_kits.fastapi_kits.entity_base import Entity
+from apps.domain.entities.base import Entity
 
 
 class UserMembershipEntity(Entity):
