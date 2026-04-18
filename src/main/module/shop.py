@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from apps.domain.entities.category import CategoryEntity
 from apps.domain.entities.products import ProductsEntity
 from apps.domain.repo.repo_address import AddressRepository
+from apps.domain.repo.repo_area import AreaRepository
 from apps.domain.repo.repo_cart import CartRepository
 from apps.domain.repo.repo_category import CategoryRepository
 from apps.domain.repo.repo_config import ConfigRepository
@@ -13,6 +14,7 @@ from apps.domain.repo.repo_membership import MembershipRepository
 from apps.domain.repo.repo_order import OrderRepository
 from apps.domain.repo.repo_order_line import OrderLineRepository
 from apps.domain.repo.repo_products import ProductRepository
+from apps.domain.repo.repo_redemption import RedemptionRepository
 from apps.domain.repo.repo_user import UserRepository
 from apps.domain.repo.repo_user_membership import UserMembershipRepository
 from apps.domain.repo.repo_transfer_record import TransferRecordRepository
@@ -43,12 +45,14 @@ class ShopModule(injector.Module):
     async def get_use_case_ini(self, repo_category: CategoryRepository, repo_product: ProductRepository,
                                repo_order_line: OrderLineRepository, repo_order: OrderRepository,
                                repo_cart: CartRepository, repo_address: AddressRepository,
+                               repo_area: AreaRepository,
                                repo_user: UserRepository, repo_coupons: CouponsRepository,
                                repo_logistic: LogisticRepository, repo_membership: MembershipRepository,
                                repo_user_membership: UserMembershipRepository,
+                               repo_redemption: RedemptionRepository,
                                repo_transfer_record: TransferRecordRepository,
                                repo_config: ConfigRepository,
                                ) -> IniUseCase:
         return IniUseCase(repo_category, repo_product, repo_order_line, repo_order, repo_cart, repo_address,
-                          repo_user, repo_coupons, repo_logistic, repo_membership, repo_user_membership,
-                          repo_transfer_record, repo_config)
+                          repo_area, repo_user, repo_coupons, repo_logistic, repo_membership, repo_user_membership,
+                          repo_redemption, repo_transfer_record, repo_config)

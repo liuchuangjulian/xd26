@@ -1,6 +1,7 @@
 import logging
 from js_kits.except_kits.except_kits import FastapiResult
 from apps.domain.repo.repo_address import AddressRepository
+from apps.domain.repo.repo_area import AreaRepository
 from apps.domain.repo.repo_cart import CartRepository
 from apps.domain.repo.repo_category import CategoryRepository
 from apps.domain.repo.repo_config import ConfigRepository
@@ -9,6 +10,7 @@ from apps.domain.repo.repo_logistic import LogisticRepository
 from apps.domain.repo.repo_membership import MembershipRepository
 from apps.domain.repo.repo_user_membership import UserMembershipRepository
 from apps.domain.repo.repo_order import OrderRepository
+from apps.domain.repo.repo_redemption import RedemptionRepository
 from apps.domain.repo.repo_transfer_record import TransferRecordRepository
 from apps.domain.repo.repo_order_line import OrderLineRepository
 from apps.domain.repo.repo_products import ProductRepository
@@ -25,11 +27,13 @@ class IniUseCase:
                  repo_order: OrderRepository,
                  repo_cart: CartRepository,
                  repo_address: AddressRepository,
+                 repo_area: AreaRepository,
                  repo_user: UserRepository,
                  repo_coupons: CouponsRepository,
                  repo_logistic: LogisticRepository,
                  repo_membership: MembershipRepository,
                  repo_user_membership: UserMembershipRepository,
+                 repo_redemption: RedemptionRepository,
                  repo_transfer_record: TransferRecordRepository,
                  repo_config: ConfigRepository,
                  ):
@@ -38,12 +42,14 @@ class IniUseCase:
         self.repo_order_line = repo_order_line
         self.repo_order = repo_order
         self.repo_cart = repo_cart
-        self.repo_user = repo_user
         self.repo_address = repo_address
+        self.repo_area = repo_area
+        self.repo_user = repo_user
         self.repo_coupons = repo_coupons
         self.repo_logistic = repo_logistic
         self.repo_membership = repo_membership
         self.repo_user_membership = repo_user_membership
+        self.repo_redemption = repo_redemption
         self.repo_transfer_record = repo_transfer_record
         self.repo_config = repo_config
 
@@ -54,12 +60,14 @@ class IniUseCase:
             await self.repo_order_line.ini(session)
             await self.repo_order.ini(session)
             await self.repo_cart.ini(session)
-            await self.repo_user.ini(session)
             await self.repo_address.ini(session)
+            await self.repo_area.ini(session)
+            await self.repo_user.ini(session)
             await self.repo_coupons.ini(session)
             await self.repo_logistic.ini(session)
             await self.repo_membership.ini(session)
             await self.repo_user_membership.ini(session)
+            await self.repo_redemption.ini(session)
             await self.repo_transfer_record.ini(session)
             await self.repo_config.ini(session)
         raise FastapiResult()
