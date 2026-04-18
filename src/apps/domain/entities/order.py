@@ -1,6 +1,7 @@
 import datetime
 from typing import List
 from js_kits.fastapi_kits.enum_base import EnumDescriptions
+from apps.domain.entities.base import Entity
 
 
 class OrderStatus(EnumDescriptions):
@@ -29,7 +30,7 @@ class OrderStatus(EnumDescriptions):
                ]
 
 
-class OrderEntity:
+class OrderEntity(Entity):
     """
     订单
     """
@@ -51,16 +52,16 @@ class OrderEntity:
     created_at: datetime.datetime
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
-
-    def __init__(self, *args, **kwargs):
-        _annotations_dict = getattr(self, "__annotations__")
-        for kwarg, value in kwargs.items():
-            if kwarg in _annotations_dict:
-                setattr(self, kwarg, value)
-        self.coupon_id_list = self.coupon_id_list if self.coupon_id_list else []
-        self.payment_id_list = self.payment_id_list if self.payment_id_list else []
-        self.delivery_id_list = self.delivery_id_list if self.delivery_id_list else []
-        self.status = self.status if self.status else OrderStatus.Ordered.value
+    #
+    # def __init__(self, *args, **kwargs):
+    #     _annotations_dict = getattr(self, "__annotations__")
+    #     for kwarg, value in kwargs.items():
+    #         if kwarg in _annotations_dict:
+    #             setattr(self, kwarg, value)
+    #     self.coupon_id_list = self.coupon_id_list if self.coupon_id_list else []
+    #     self.payment_id_list = self.payment_id_list if self.payment_id_list else []
+    #     self.delivery_id_list = self.delivery_id_list if self.delivery_id_list else []
+    #     self.status = self.status if self.status else OrderStatus.Ordered.value
 
     def refresh_data_from_ol(self, ol_list):
         self.count = sum([ol.count for ol in ol_list])

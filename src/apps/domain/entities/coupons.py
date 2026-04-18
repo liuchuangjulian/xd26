@@ -1,5 +1,6 @@
 import datetime
 from js_kits.fastapi_kits.enum_base import EnumDescriptions
+from apps.domain.entities.base import Entity
 
 
 class CouponType(EnumDescriptions):
@@ -30,7 +31,7 @@ class CouponGeneratedType(EnumDescriptions):
         }.get(self, "未知")
 
 
-class Coupon:
+class Coupon(Entity):
     """
     优惠券
     """
@@ -54,11 +55,11 @@ class Coupon:
         self.coupon_type = CouponType.NoneType.value
         return self
 
-    def __init__(self, *args, **kwargs):
-        _annotations_dict = getattr(self, "__annotations__")
-        for kwarg, value in kwargs.items():
-            if kwarg in _annotations_dict:
-                setattr(self, kwarg, value)
+    # def __init__(self, *args, **kwargs):
+    #     _annotations_dict = getattr(self, "__annotations__")
+    #     for kwarg, value in kwargs.items():
+    #         if kwarg in _annotations_dict:
+    #             setattr(self, kwarg, value)
 
     def can_use(self, total):
         # 是否可以用

@@ -12,7 +12,7 @@ class LogisticStatus:
     AllScrapped = 7  # 全部货物损坏
 
 
-class Logistic:
+class Logistic(Entity):
     """
     物流
     """
@@ -29,11 +29,11 @@ class Logistic:
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
-    def __init__(self, *args, **kwargs):
-        _annotations_dict = getattr(self, "__annotations__")
-        for kwarg, value in kwargs.items():
-            if kwarg in _annotations_dict:
-                setattr(self, kwarg, value)
+    # def __init__(self, *args, **kwargs):
+    #     _annotations_dict = getattr(self, "__annotations__")
+    #     for kwarg, value in kwargs.items():
+    #         if kwarg in _annotations_dict:
+    #             setattr(self, kwarg, value)
         # self.coupon_id_list = self.coupon_id_list if self.coupon_id_list else []
         # self.payment_id_list = self.payment_id_list if self.payment_id_list else []
         # self.delivery_id_list = self.delivery_id_list if self.delivery_id_list else []

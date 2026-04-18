@@ -1,7 +1,8 @@
 import datetime
+from apps.domain.entities.base import Entity
 
 
-class Area:
+class Area(Entity):
     id: int
     code: str
     name: str
@@ -11,11 +12,11 @@ class Area:
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
 
-    def __init__(self, *args, **kwargs):
-        _annotations_dict = getattr(self, "__annotations__")
-        for kwarg, value in kwargs.items():
-            if kwarg in _annotations_dict:
-                setattr(self, kwarg, value)
+    # def __init__(self, *args, **kwargs):
+    #     _annotations_dict = getattr(self, "__annotations__")
+    #     for kwarg, value in kwargs.items():
+    #         if kwarg in _annotations_dict:
+    #             setattr(self, kwarg, value)
 
     def to_dict(self):
         return {

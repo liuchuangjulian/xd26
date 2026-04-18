@@ -1,8 +1,9 @@
 import datetime
 from typing import List
+from apps.domain.entities.base import Entity
 
 
-class ProductsEntity:
+class ProductsEntity(Entity):
     """
     商品
     """
@@ -23,28 +24,28 @@ class ProductsEntity:
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
 
-    def __init__(self, id=None, category_id_list=None, name=None, show_index=None,
-                 describe=None, tips=None, sold=None, img=None, original_price=None,
-                 price=None, units=None, barcode=None,
-                 extend_property=None,  created_at=None,
-                 updated_at=None, deleted_at=None, *args, **kwargs):
-        super().__init__()
-        self.category_id_list = category_id_list if category_id_list else []
-        self.id = id
-        self.describe = describe
-        self.tips = tips
-        self.sold = sold
-        self.barcode = barcode
-        self.img = img
-        self.original_price = original_price
-        self.price = price
-        self.units = units
-        self.extend_property = extend_property
-        self.name = name
-        self.show_index = show_index
-        self.created_at = created_at
-        self.updated_at = updated_at
-        self.deleted_at = deleted_at
+    # def __init__(self, id=None, category_id_list=None, name=None, show_index=None,
+    #              describe=None, tips=None, sold=None, img=None, original_price=None,
+    #              price=None, units=None, barcode=None,
+    #              extend_property=None,  created_at=None,
+    #              updated_at=None, deleted_at=None, *args, **kwargs):
+    #     super().__init__()
+    #     self.category_id_list = category_id_list if category_id_list else []
+    #     self.id = id
+    #     self.describe = describe
+    #     self.tips = tips
+    #     self.sold = sold
+    #     self.barcode = barcode
+    #     self.img = img
+    #     self.original_price = original_price
+    #     self.price = price
+    #     self.units = units
+    #     self.extend_property = extend_property
+    #     self.name = name
+    #     self.show_index = show_index
+    #     self.created_at = created_at
+    #     self.updated_at = updated_at
+    #     self.deleted_at = deleted_at
 
     def get_limit_count(self):
         # 限购数量

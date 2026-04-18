@@ -1,7 +1,8 @@
 import datetime
+from apps.domain.entities.base import Entity
 
 
-class CartEntity:
+class CartEntity(Entity):
     """
     购物车
     """
@@ -14,17 +15,17 @@ class CartEntity:
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
 
-    def __init__(self, *args, **kwargs):
-        _annotations_dict = getattr(self, "__annotations__")
-        for kwarg, value in kwargs.items():
-            if kwarg in _annotations_dict:
-                setattr(self, kwarg, value)
-        if self.p_id_info_map is None:
-            self.p_id_info_map = {}
-        if self.p_list is None:
-            self.p_list = []
-        if self.extend_property is None:
-            self.extend_property = {}
+    # def __init__(self, *args, **kwargs):
+    #     _annotations_dict = getattr(self, "__annotations__")
+    #     for kwarg, value in kwargs.items():
+    #         if kwarg in _annotations_dict:
+    #             setattr(self, kwarg, value)
+    #     if self.p_id_info_map is None:
+    #         self.p_id_info_map = {}
+    #     if self.p_list is None:
+    #         self.p_list = []
+    #     if self.extend_property is None:
+    #         self.extend_property = {}
 
     def get_p_ids(self):
         return [pid for pid, count in self.p_id_info_map.items() if count > 0]
