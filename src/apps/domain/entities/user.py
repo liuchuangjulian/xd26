@@ -21,7 +21,7 @@ class User(Entity):
 
     def generate_code_nickname(self):
         code = "".join(random.choice("012356789") for _ in range(10))
-        return f"顾客{code[:5]}-{code[5:]}"
+        self.nickname = f"顾客{code[:5]}-{code[5:]}"
 
     def user_info_to_dict(self):
         return {
