@@ -2,6 +2,7 @@ import injector
 from js_kits.fastapi_kits.async_injection_provider import async_provider
 from sqlalchemy.ext.asyncio import AsyncSession
 from apps.domain.entities.redemption_history import RedemptionHistory
+from apps.domain.entities.redemption_card import RedemptionCard
 from apps.domain.repo.repo_redemption import RedemptionRepository
 from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.redemption.query_redemption import QueryRedemptionHistory
@@ -19,5 +20,9 @@ class RedemptionModule(injector.Module):
         return QueryRedemptionHistory(repo=repo)
 
     @async_provider
-    async def provide_redeem_card_use_case(self, repo: UserRepository) -> RedeemCardUseCase:
-        return RedeemCardUseCase(repo=repo)
+    async def provide_redeem_card_use_case(
+        self,
+        user_repo: UserRepository,
+        redemption_repo: RedemptionRepository
+    ) -> RedeemCardUseCase:
+        return RedeemCardUseCase(user_repo=user_repo, redemption_repo=redemption_repo)

@@ -1,19 +1,18 @@
 import datetime
 from decimal import Decimal
+from typing import Optional
 
 
 class RedemptionHistory:
     id: int
     uid: int
     card_number: str
-    card_password: str
     amount: Decimal
     status: int
     redemption_time: datetime.datetime
-    expired_at: datetime.datetime
     created_at: datetime.datetime
-    updated_at: datetime.datetime
-    deleted_at: datetime.datetime
+    updated_at: Optional[datetime.datetime]
+    deleted_at: Optional[datetime.datetime]
 
     def __init__(self, *args, **kwargs):
         _annotations_dict = getattr(self, "__annotations__")
