@@ -1,6 +1,7 @@
 from js_kits.fastapi_kits.repo_base import BaseRepository
 from sqlalchemy import text, select
 from typing import Optional
+import warnings
 from apps.domain.entities.redemption_history import RedemptionHistory
 from apps.domain.entities.redemption_card import RedemptionCard
 
@@ -26,7 +27,6 @@ class RedemptionRepository(BaseRepository):
               KEY `ix_redemption_cards_used_by` (`used_by`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='兑换卡';
         """
-        await session.execute(text(create_cards_sql))
 
         # 创建兑换记录表
         create_history_sql = """CREATE TABLE IF NOT EXISTS `redemption_history` (
@@ -44,7 +44,11 @@ class RedemptionRepository(BaseRepository):
               KEY `ix_redemption_history_card_number` (`card_number`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='兑换记录';
         """
-        await session.execute(text(create_history_sql))
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            await session.execute(text(create_cards_sql), execution_options={"warning": False})
+            await session.execute(text(create_history_sql), execution_options={"warning": False})
 
     async def get_card_by_number(self, session, card_number: str) -> Optional[RedemptionCard]:
         """根据卡号查询兑换卡"""
