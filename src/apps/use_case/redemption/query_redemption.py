@@ -18,7 +18,7 @@ class QueryRedemptionHistory:
                 equal_maps={"uid": uid},
                 page=page,
                 page_size=page_size,
-                order_by_list=["redemption_time DESC"]
+                order_by_list=["-redemption_time"]
             )
 
             raise FastapiResult({
