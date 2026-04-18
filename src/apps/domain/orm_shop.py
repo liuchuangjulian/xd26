@@ -133,6 +133,7 @@ membership_table = Table(
     Column("description", String(512), nullable=True, comment="描述"),
     Column("status", SmallInteger, nullable=False, server_default=text("1"), comment="状态：1-启用，0-禁用"),
     Column("show_index", Integer, nullable=True, comment="展示序号"),
+    Column("max_purchase_count", Integer, nullable=True, comment="最大购买数量"),
     Column("extend_property", JSON, nullable=True, comment="扩展数据"),
     Column("created_at", DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP")),
     Column("updated_at", DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
