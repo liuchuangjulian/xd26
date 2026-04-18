@@ -37,16 +37,18 @@ class WechatLoginUseCase:
 
     async def execute(self, code) -> None:
         async with self.repo.session as session:
-            _, openid = await self.get_mp_openid(code)
+            # _, openid = await self.get_mp_openid(code)
+            openid = "1111111111111111"
             _, user_obj_list = await self.repo.get_list(session, page_size=1, with_total=False,
                                                         equal_maps={"wechat_openid": openid})
             if user_obj_list:
                 obj_user = user_obj_list[0]
             else:
                 obj_user = User(wechat_openid=openid, deleted_at=None)
-                await self.repo.add(session, obj_user)
                 obj_user.generate_code_nickname()
                 await self.repo.add(session, obj_user)
+            logger.info(f"obj_user.id: {obj_user.id}")
             user_token_obj = UserToken(uid=obj_user.id)
+            print(user_token_obj.to_dict())
             await self.repo.add(session, user_token_obj)
             raise FastapiResult({"data": obj_user.to_login_result(user_token_obj.token)})
