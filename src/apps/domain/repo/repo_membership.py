@@ -64,7 +64,7 @@ class MembershipRepository(BaseRepository):
             await self.add(session, MembershipEntity(
                 id=4,
                 name="年度正式会员",
-                price=299.90,
+                price=299.99,
                 duration=365,
                 description="享受365天会员权益，超值优惠",
                 status=1,
