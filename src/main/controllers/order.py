@@ -13,22 +13,21 @@ from apps.use_case.order.use_case_update_order import UseCaseUpdateOrder
 from main.controllers.check_auth import auth
 from main.controllers.input.order import CreateOrderParams, QueryOrderParams, QueryOrderLineParams, \
     PreCreateOrderParams, ChangeOrderStatsParams
-# from main.controllers.output.order import PreCreateOrderResponse
+from main.controllers.output.order import PreCreateOrderResponse
 
 router_order = APIRouter(route_class=UserRoute, prefix="/order", tags=["订单"])
 logger = logging.getLogger(__name__)
 
 
-# @router_order.post("/pre_create", response_model=PreCreateOrderResponse)
-# @auth
-# async def create_order(request: Request, redis_client: Redis = Injected(Redis),
-#                        user_repo: UserRepository = Injected(UserRepository), uid=None,
-#                        params: PreCreateOrderParams = Body(...),
-#                        use_case: UseCasePreCreateOrder = Injected(UseCasePreCreateOrder)):
-#     data = await use_case.execute(uid, [{"count": product_count.count, "p_id": product_count.p_id}
-#                                  for product_count in params.p_id_count_list],
-#                                  coupon_id=params.coupon_id)
-#     return PreCreateOrderResponse(code=0, msg="ok", data=data)
+@router_order.post("/pre_create", response_model=PreCreateOrderResponse)
+@auth
+async def create_order(request: Request, redis_client: Redis = Injected(Redis),
+                       user_repo: UserRepository = Injected(UserRepository), uid=None,
+                       params: PreCreateOrderParams = Body(...),
+                       use_case: UseCasePreCreateOrder = Injected(UseCasePreCreateOrder)):
+    await use_case.execute(uid, [{"count": product_count.count, "p_id": product_count.p_id}
+                                 for product_count in params.p_id_count_list],
+                                 coupon_id=params.coupon_id)
 '''
 curl -X 'POST' \
   'http://localhost:8080/api/order/pre_create' \
