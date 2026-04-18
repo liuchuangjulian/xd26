@@ -34,8 +34,11 @@ class ProductRepository(BaseRepository):
 
         _, obj_list = await self.get_list(session, Entity=ProductsEntity, equal_maps={"id": 1}, with_total=False)
         if not obj_list:
-            await self.add(session, ProductsEntity(id=1, name="红牛", show_index=1, category_id_list=[1],
-                                                   barcode="1234567", tips={}, sold=1,
-                                                   img="https://xd8.oss-cn-shanghai.aliyuncs.com/for_test_img.png",
-                                                   original_price=600, price=500, units="瓶", describe="描述信息",
-                                                   extend_property={}))
+            try:
+                await self.add(session, ProductsEntity(id=1, name="红牛", show_index=1, category_id_list=[1],
+                                                       barcode="1234567", tips={}, sold=1,
+                                                       img="https://xd8.oss-cn-shanghai.aliyuncs.com/for_test_img.png",
+                                                       original_price=600, price=500, units="瓶", describe="描述信息",
+                                                       extend_property={}))
+            except Exception as e:
+                ...
