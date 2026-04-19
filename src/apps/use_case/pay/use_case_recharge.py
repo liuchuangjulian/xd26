@@ -8,7 +8,7 @@ QueryProductTypeCustomer = "customer"
 QueryProductTypeBoss = "boss"
 
 
-class UseCaseRecharge(UseCasePayBase):
+class UseCaseRecharge:
 
     async def get_order_obj(self, order_id, session):
         return None

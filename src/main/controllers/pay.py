@@ -27,11 +27,11 @@ async def pay(
         request: Request,
         params: PayParams = Body(...),
         repo: UserRepository = Injected(UserRepository),
-        shop_repo: ShopRepository = Injected(ShopRepository),
+        # shop_repo: ShopRepository = Injected(ShopRepository),
         recharge: Recharge = Injected(Recharge),
 ):
     request.state.request_body = await request.body()
-    user_obj, shop_obj = await check_login(request, repo, shop_repo, params)
+    # user_obj, shop_obj = await check_login(request, repo, shop_repo, params)
     out_dto = await recharge.execute(prepare_recharge_input(params, user_obj))
 
     raise FastapiResult(out_dto.to_dict())
