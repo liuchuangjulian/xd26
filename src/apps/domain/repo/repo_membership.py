@@ -34,7 +34,7 @@ class MembershipRepository(BaseRepository):
             await self.add(session, MembershipEntity(
                 id=1,
                 name="周度体验会员",
-                price=5.99,
+                price=0.01, # 5.99
                 duration=7,
                 description="可购买3次，试试首选",
                 status=1,
@@ -46,7 +46,7 @@ class MembershipRepository(BaseRepository):
             await self.add(session, MembershipEntity(
                 id=2,
                 name="月度体验会员",
-                price=24.99,
+                price=0.01, # 24.99
                 duration=30,
                 description="可购买2次，初步体验",
                 status=1,
@@ -57,7 +57,7 @@ class MembershipRepository(BaseRepository):
             await self.add(session, MembershipEntity(
                 id=3,
                 name="季度体验会员",
-                price=74.99,
+                price=0.01, # 74.99
                 duration=90,
                 description="可购买1次，深度体验",
                 status=1,
@@ -68,7 +68,7 @@ class MembershipRepository(BaseRepository):
             await self.add(session, MembershipEntity(
                 id=4,
                 name="年度正式会员",
-                price=299.99,
+                price=0.01, # 299.99
                 duration=365,
                 description="享受365天会员权益，超值优惠",
                 status=1,

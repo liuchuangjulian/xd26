@@ -33,6 +33,7 @@ class QueryMembership:
             result_list, cannot_buy_list = [], []
             for membership in obj_list:
                 membership_dict = membership.to_dict()
+                membership_dict["price"] = f"{membership_dict['price']:.2f}"
                 purchased_count = membership_purchase_count.get(membership.id, 0)
                 max_purchase_count = getattr(membership, 'max_purchase_count', -1)
                 membership_dict['purchased_count'] = purchased_count
