@@ -10,6 +10,8 @@ from apps.use_case.order.query_order_line import QueryOrderLine
 from apps.use_case.order.use_case_create_order import UseCaseCreateOrder
 from apps.use_case.order.use_case_pre_create_order import UseCasePreCreateOrder
 from apps.use_case.order.use_case_update_order import UseCaseUpdateOrder
+from apps.use_case.order.create_shopping_order_pay import CreateShoppingOrderPay
+from apps.use_case.order.handle_shopping_order_pay_callback import HandleShoppingOrderPayCallback
 
 
 class OrderModule(injector.Module):
@@ -41,3 +43,16 @@ class OrderModule(injector.Module):
     @async_provider
     async def get_use_case_pre_create_order(self, repo: OrderRepository) -> UseCasePreCreateOrder:
         return UseCasePreCreateOrder(repo)
+
+    @async_provider
+    async def get_create_shopping_order_pay(self,
+                                            order_repo: OrderRepository,
+                                            user_repo,
+                                            wx_pay) -> CreateShoppingOrderPay:
+        from apps.domain.repo.repo_user import UserRepository
+        return CreateShoppingOrderPay(order_repo, user_repo, wx_pay)
+
+    @async_provider
+    async def get_handle_shopping_order_pay_callback(self,
+                                                     order_repo: OrderRepository) -> HandleShoppingOrderPayCallback:
+        return HandleShoppingOrderPayCallback(order_repo)

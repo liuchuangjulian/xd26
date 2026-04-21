@@ -10,6 +10,7 @@ from apps.use_case.membership.query_membership import QueryMembership
 from apps.use_case.membership.create_user_membership import UseCaseCreateUserMembership
 from apps.use_case.membership.create_membership_order import CreateMembershipOrder
 from apps.use_case.membership.handle_membership_pay_callback import HandleMembershipPayCallback
+from apps.use_case.pay.unified_pay_callback import UnifiedPayCallback
 from apps.use_case.membership.query_membership_order import QueryMembershipOrder
 from main.controllers.check_auth import auth
 from main.controllers.output.membership import MembershipListResponse, CreateUserMembershipResponse
@@ -64,11 +65,11 @@ async def buy_membership(request: Request,
     await use_case.execute(uid, params.membership_id)
 
 
-@router_membership.post("/notify", summary="会员支付回调")
-async def membership_pay_notify(request: Request,
-                                wx_pay: WeChatPay = Injected(WeChatPay),
-                                use_case: HandleMembershipPayCallback = Injected(HandleMembershipPayCallback)):
-    """微信支付回调通知"""
+@router_membership.post("/notify", summary="统一支付回调")
+async def unified_pay_notify(request: Request,
+                             wx_pay: WeChatPay = Injected(WeChatPay),
+                             use_case: UnifiedPayCallback = Injected(UnifiedPayCallback)):
+    """微信支付回调通知 - 兼容会员订单和购物订单"""
     body = await request.body()
     result = wx_pay.callback(request.headers, body)
 
@@ -79,6 +80,7 @@ async def membership_pay_notify(request: Request,
             'transaction_id': resp.get('transaction_id'),
             'amount': resp.get('amount')
         }
+        # 使用统一的回调处理器
         result = await use_case.execute(callback_data)
         raise FastapiResult(result)
     else:

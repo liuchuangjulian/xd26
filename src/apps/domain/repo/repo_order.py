@@ -21,11 +21,15 @@ class OrderRepository(BaseRepository):
                   `payment_id_list` json DEFAULT NULL COMMENT '支付id列表数组',
                   `delivery_id_list` json DEFAULT NULL COMMENT '配送id列表 数组',
                   `feedback_coins` int DEFAULT NULL COMMENT '回馈积分',
+                  `out_trade_no` varchar(64) DEFAULT NULL COMMENT '商户订单号',
+                  `transaction_id` varchar(64) DEFAULT NULL COMMENT '微信支付订单号',
+                  `pay_time` datetime DEFAULT NULL COMMENT '支付时间',
                   `extend_property` json DEFAULT NULL COMMENT '扩展数据',
                   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据更新时间',
                   `deleted_at` datetime DEFAULT NULL,
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `ix_order_out_trade_no` (`out_trade_no`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单';
                 """
         with warnings.catch_warnings():

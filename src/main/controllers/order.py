@@ -10,6 +10,7 @@ from apps.use_case.order.query_order_line import QueryOrderLine
 from apps.use_case.order.use_case_create_order import UseCaseCreateOrder
 from apps.use_case.order.use_case_pre_create_order import UseCasePreCreateOrder
 from apps.use_case.order.use_case_update_order import UseCaseUpdateOrder
+from apps.use_case.order.create_shopping_order_pay import CreateShoppingOrderPay
 from main.controllers.check_auth import auth
 from main.controllers.input.order import CreateOrderParams, QueryOrderParams, QueryOrderLineParams, \
     PreCreateOrderParams, ChangeOrderStatsParams
@@ -97,4 +98,22 @@ curl -X 'POST' \
   -H 'accept: application/json' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' \
   -H 'Content-Type: application/json' \
   -d '{"status": 7,"order_id": 1}' | jq .
+'''
+
+
+@router_order.post("/pay", summary="购物订单支付")
+@auth
+async def pay_order(request: Request, redis_client: Redis = Injected(Redis),
+                    user_repo: UserRepository = Injected(UserRepository), uid=None,
+                    params: dict = Body(...),
+                    use_case: CreateShoppingOrderPay = Injected(CreateShoppingOrderPay)):
+    """创建购物订单的微信支付"""
+    order_id = params.get("order_id")
+    await use_case.execute(uid, order_id)
+'''
+curl -X 'POST' \
+  'http://localhost:8080/api/order/pay' \
+  -H 'accept: application/json' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' \
+  -H 'Content-Type: application/json' \
+  -d '{"order_id": 1}' | jq .
 '''

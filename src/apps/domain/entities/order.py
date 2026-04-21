@@ -48,6 +48,10 @@ class OrderEntity(Entity):
     feedback_coins: int  # 回馈积分
     payment_id_list: List[int]  # 支付id列表
     delivery_id_list: List[int]  # 配送id列表
+    # 微信支付相关字段
+    out_trade_no: str  # 商户订单号
+    transaction_id: str  # 微信支付订单号
+    pay_time: datetime.datetime  # 支付时间
     extend_property: dict
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -83,6 +87,22 @@ class OrderEntity(Entity):
 
     def description(self):
         return self.main_info
+
+    @staticmethod
+    def generate_out_trade_no():
+        """生成商户订单号 - 购物订单使用 SHOP 前缀"""
+        from random import sample
+        from string import digits
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        random_str = ''.join(sample(digits, 6))
+        return f"SHOP{timestamp}{random_str}"
+
+    def mark_as_paid(self, transaction_id: str):
+        """标记订单为已支付"""
+        self.status = OrderStatus.Payed.value
+        self.transaction_id = transaction_id
+        self.pay_time = datetime.datetime.now()
+        self.real_pay = self.total - self.discount
 
     def to_dict(self):
         base = {

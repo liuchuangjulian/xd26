@@ -14,6 +14,8 @@ from apps.use_case.membership.create_user_membership import UseCaseCreateUserMem
 from apps.use_case.membership.create_membership_order import CreateMembershipOrder
 from apps.use_case.membership.handle_membership_pay_callback import HandleMembershipPayCallback
 from apps.use_case.membership.query_membership_order import QueryMembershipOrder
+from apps.use_case.pay.unified_pay_callback import UnifiedPayCallback
+from apps.use_case.order.handle_shopping_order_pay_callback import HandleShoppingOrderPayCallback
 
 
 class MembershipModule(injector.Module):
@@ -56,3 +58,9 @@ class MembershipModule(injector.Module):
     @async_provider
     async def get_query_membership_order(self, repo: MembershipOrderRepository) -> QueryMembershipOrder:
         return QueryMembershipOrder(repo)
+
+    @async_provider
+    async def get_unified_pay_callback(self,
+                                       handle_membership_pay_callback: HandleMembershipPayCallback,
+                                       handle_shopping_order_pay_callback: HandleShoppingOrderPayCallback) -> UnifiedPayCallback:
+        return UnifiedPayCallback(handle_membership_pay_callback, handle_shopping_order_pay_callback)
