@@ -1,6 +1,8 @@
 import datetime
 from js_kits.fastapi_kits.enum_base import EnumDescriptions
 from apps.domain.entities.base import Entity
+from random import sample
+from string import ascii_letters, digits
 
 
 class MembershipOrderStatus(EnumDescriptions):
@@ -27,6 +29,22 @@ class MembershipOrderEntity(Entity):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
+
+    def create_order(self, uid, membership):
+        self.uid = uid
+        self.membership_id = membership.id
+        self.out_trade_no = self._generate_out_trade_no()
+        self.status = MembershipOrderStatus.UnPaid.value
+        self.membership_info = membership.to_dict()
+        self.total_fee = int(membership.price * 100)
+        return self
+
+    @staticmethod
+    def _generate_out_trade_no():
+        """生成商户订单号"""
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        random_str = ''.join(sample(digits, 6))
+        return f"MEM{timestamp}{random_str}"
 
     def mark_as_paid(self, transaction_id: str):
         """标记订单为已支付"""
