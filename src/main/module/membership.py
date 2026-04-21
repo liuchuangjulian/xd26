@@ -61,6 +61,7 @@ class MembershipModule(injector.Module):
 
     @async_provider
     async def get_unified_pay_callback(self,
+                                       wx_pay: WeChatPay,
                                        handle_membership_pay_callback: HandleMembershipPayCallback,
                                        handle_shopping_order_pay_callback: HandleShoppingOrderPayCallback) -> UnifiedPayCallback:
-        return UnifiedPayCallback(handle_membership_pay_callback, handle_shopping_order_pay_callback)
+        return UnifiedPayCallback(wx_pay, handle_membership_pay_callback, handle_shopping_order_pay_callback)

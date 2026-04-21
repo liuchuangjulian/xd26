@@ -4,7 +4,6 @@ from fastapi import APIRouter, Request, Depends, Body
 import logging
 from js_kits.fastapi_kits.user_route import UserRoute
 from js_kits.except_kits.except_kits import FastapiResult
-from wechatpayv3 import WeChatPay
 from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.membership.query_membership import QueryMembership
 from apps.use_case.membership.create_user_membership import UseCaseCreateUserMembership
@@ -67,24 +66,9 @@ async def buy_membership(request: Request,
 
 @router_membership.post("/notify", summary="统一支付回调")
 async def unified_pay_notify(request: Request,
-                             wx_pay: WeChatPay = Injected(WeChatPay),
                              use_case: UnifiedPayCallback = Injected(UnifiedPayCallback)):
     """微信支付回调通知 - 兼容会员订单和购物订单"""
-    body = await request.body()
-    result = wx_pay.callback(request.headers, body)
-
-    if result and result.get('event_type') == 'TRANSACTION.SUCCESS':
-        resp = result.get('resource')
-        callback_data = {
-            'out_trade_no': resp.get('out_trade_no'),
-            'transaction_id': resp.get('transaction_id'),
-            'amount': resp.get('amount')
-        }
-        # 使用统一的回调处理器
-        result = await use_case.execute(callback_data)
-        raise FastapiResult(result)
-    else:
-        raise FastapiResult({'code': 'FAILED', 'message': '失败'})
+    await use_case.execute(request)
 
 
 @router_membership.get("/orders", summary="查询会员订单")
