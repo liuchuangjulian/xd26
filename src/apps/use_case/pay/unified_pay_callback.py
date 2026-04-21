@@ -1,7 +1,8 @@
 import logging
 from js_kits.except_kits.except_kits import FastapiResult
-from fastapi import Request
 from wechatpayv3 import WeChatPay
+from sqlalchemy.orm.attributes import flag_modified
+from apps.domain.repo.repo_membership_order import MembershipOrderRepository
 
 logger = logging.getLogger(__name__)
 
@@ -11,53 +12,47 @@ class UnifiedPayCallback:
     统一支付回调处理器
     根据商户订单号前缀识别订单类型并分发到对应的处理器
     """
-    ORDER_TYPE_MEMBERSHIP = "MEM"  # 会员订单前缀
-    ORDER_TYPE_SHOPPING = "SHOP"  # 购物订单前缀
 
-    def __init__(self,
-                 wx_pay: WeChatPay,
-                 handle_membership_pay_callback=None,
-                 handle_shopping_order_pay_callback=None):
+    # 订单类型前缀定义
+    ORDER_TYPE_MEMBERSHIP = "MEM"
+    ORDER_TYPE_SHOPPING = "SHOP"
+    # 成功响应
+    SUCCESS_RESPONSE = {'code': 'SUCCESS', 'message': '成功'}
+    FAIL_RESPONSE = {'code': 'FAIL', 'message': '处理失败'}
+
+    def __init__(self, wx_pay: WeChatPay, membership_order_repo: MembershipOrderRepository,):
         self.wx_pay = wx_pay
-        self.handle_membership_pay_callback = handle_membership_pay_callback
-        self.handle_shopping_order_pay_callback = handle_shopping_order_pay_callback
+        self.membership_order_repo = membership_order_repo
 
-    async def execute(self, request: Request) -> None:
+    async def handle_membership_order(self, out_trade_no, resource):
+        async with self.membership_order_repo.session as session:
+            _, mo_list = await self.membership_order_repo.get_list(session, equal_maps={"out_trade_no": out_trade_no}, with_total=False)
+            if not mo_list:
+                raise FastapiResult(result={**self.FAIL_RESPONSE})
+            mo_obj = mo_list[0]
+            mo_obj.paid_from_wx(resource)
+            flag_modified(mo_obj, "extend_property")
+            await self.membership_order_repo.add(session, mo_obj)
+
+
+    async def execute(self, headers, body) -> None:
         """处理微信支付回调"""
-        body = await request.body()
-        result = self.wx_pay.callback(request.headers, body)
+        out_trade_no, resource = await self._parse_wx_callback(headers, body)
 
-        if result and result.get('event_type') == 'TRANSACTION.SUCCESS':
-            resp = result.get('resource')
-            callback_data = {
-                'out_trade_no': resp.get('out_trade_no'),
-                'transaction_id': resp.get('transaction_id'),
-                'amount': resp.get('amount')
-            }
+        if out_trade_no.startswith(self.ORDER_TYPE_MEMBERSHIP):
+            await self.handle_membership_order(out_trade_no, resource)
+        elif out_trade_no.startswith(self.ORDER_TYPE_MEMBERSHIP):
+            ...
 
-            out_trade_no = callback_data.get('out_trade_no')
-            logger.info(f"收到支付回调 out_trade_no:{out_trade_no}")
+        raise FastapiResult(result={**self.SUCCESS_RESPONSE})
 
-            # 根据订单号前缀识别订单类型
-            if out_trade_no.startswith(self.ORDER_TYPE_MEMBERSHIP):
-                # 会员订单
-                if self.handle_membership_pay_callback:
-                    result = await self.handle_membership_pay_callback.execute(callback_data)
-                    raise FastapiResult(result)
-                else:
-                    logger.error("会员支付回调处理器未配置")
-                    raise FastapiResult({'code': 'FAIL', 'message': '处理器未配置'})
-            elif out_trade_no.startswith(self.ORDER_TYPE_SHOPPING):
-                # 购物订单
-                if self.handle_shopping_order_pay_callback:
-                    result = await self.handle_shopping_order_pay_callback.execute(callback_data)
-                    raise FastapiResult(result)
-                else:
-                    logger.error("购物订单支付回调处理器未配置")
-                    raise FastapiResult({'code': 'FAIL', 'message': '处理器未配置'})
-            else:
-                logger.error(f"未知订单类型: {out_trade_no}")
-                raise FastapiResult({'code': 'FAIL', 'message': '未知订单类型'})
-        else:
+    async def _parse_wx_callback(self, headers, body):
+        """解析微信支付回调"""
+        result = self.wx_pay.callback(headers, body)
+        if not result or result.get('event_type') != 'TRANSACTION.SUCCESS':
             logger.error(f"微信回调验证失败或事件类型不匹配: {result}")
-            raise FastapiResult({'code': 'FAILED', 'message': '失败'})
+            raise FastapiResult({'code': 'FAILED', 'message': '回调验证失败'})
+        logger.info(f"收到支付回调 resource:{result.get('resource')}")
+        return result.get('resource').get('out_trade_no'), result.get('resource')
+
+

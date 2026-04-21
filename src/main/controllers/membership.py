@@ -45,7 +45,8 @@ async def buy_membership(request: Request,
 async def unified_pay_notify(request: Request,
                              use_case: UnifiedPayCallback = Injected(UnifiedPayCallback)):
     """微信支付回调通知 - 兼容会员订单和购物订单"""
-    await use_case.execute(request)
+    body = await request.body()
+    await use_case.execute(request.headers, body)
 
 
 @router_membership.get("/orders", summary="查询会员订单")

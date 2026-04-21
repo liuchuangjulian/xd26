@@ -39,6 +39,13 @@ class MembershipOrderEntity(Entity):
         self.total_fee = int(membership.price * 100)
         return self
 
+    def paid_from_wx(self, resource):
+        self.status = MembershipOrderStatus.Paid.value
+        self.pay_time = datetime.datetime.now()
+        if not isinstance(self.extend_property, dict):
+            self.extend_property = {}
+        self.extend_property["wx_resource"] = resource
+
     @staticmethod
     def _generate_out_trade_no():
         """生成商户订单号"""
