@@ -1,18 +1,9 @@
 import datetime
-from js_kits.fastapi_kits.enum_base import EnumDescriptions
-from apps.domain.entities.base import Entity
-from random import sample
-from string import ascii_letters, digits
+from apps.domain.entities.order_base import OrderStatus, OrderBase
 
 
-class MembershipOrderStatus(EnumDescriptions):
-    UnPaid = 0  # 未支付
-    Paid = 1  # 已支付
-    Cancelled = 2  # 已取消
-    Refunded = 3  # 已退款
 
-
-class MembershipOrderEntity(Entity):
+class MembershipOrderEntity(OrderBase):
     """
     会员购买订单
     """
@@ -34,41 +25,27 @@ class MembershipOrderEntity(Entity):
         self.uid = uid
         self.membership_id = membership.id
         self.out_trade_no = self._generate_out_trade_no()
-        self.status = MembershipOrderStatus.UnPaid.value
+        self.status = OrderStatus.Ordered.value
         self.membership_info = membership.to_dict()
         self.total_fee = int(membership.price * 100)
         return self
 
-    def paid_from_wx(self, resource):
-        self.status = MembershipOrderStatus.Paid.value
-        self.pay_time = datetime.datetime.now()
-        if not isinstance(self.extend_property, dict):
-            self.extend_property = {}
-        self.extend_property["wx_resource"] = resource
-
-    @staticmethod
-    def _generate_out_trade_no():
-        """生成商户订单号"""
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        random_str = ''.join(sample(digits, 6))
-        return f"MEM{timestamp}{random_str}"
-
     def mark_as_paid(self, transaction_id: str):
         """标记订单为已支付"""
-        self.status = MembershipOrderStatus.Paid.value
+        self.status = OrderStatus.Paid.value
         self.transaction_id = transaction_id
         self.pay_time = datetime.datetime.now()
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "uid": self.uid,
-            "membership_id": self.membership_id,
-            "out_trade_no": self.out_trade_no,
-            "transaction_id": self.transaction_id,
-            "total_fee": self.total_fee,
-            "status": self.status,
-            "membership_info": self.membership_info,
-            "pay_time": str(self.pay_time) if self.pay_time else None,
-            "created_at": str(self.created_at),
-        }
+    # def to_dict(self):
+    #     return {
+    #         "id": self.id,
+    #         "uid": self.uid,
+    #         "membership_id": self.membership_id,
+    #         "out_trade_no": self.out_trade_no,
+    #         "transaction_id": self.transaction_id,
+    #         "total_fee": self.total_fee,
+    #         "status": self.status,
+    #         "membership_info": self.membership_info,
+    #         "pay_time": str(self.pay_time) if self.pay_time else None,
+    #         "created_at": str(self.created_at),
+    #     }

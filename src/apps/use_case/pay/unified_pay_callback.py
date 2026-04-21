@@ -3,6 +3,7 @@ from js_kits.except_kits.except_kits import FastapiResult
 from wechatpayv3 import WeChatPay
 from sqlalchemy.orm.attributes import flag_modified
 from apps.domain.repo.repo_membership_order import MembershipOrderRepository
+from apps.domain.repo.repo_order import OrderRepository
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +21,10 @@ class UnifiedPayCallback:
     SUCCESS_RESPONSE = {'code': 'SUCCESS', 'message': '成功'}
     FAIL_RESPONSE = {'code': 'FAIL', 'message': '处理失败'}
 
-    def __init__(self, wx_pay: WeChatPay, membership_order_repo: MembershipOrderRepository,):
+    def __init__(self, wx_pay: WeChatPay, membership_order_repo: MembershipOrderRepository, order_repo: OrderRepository):
         self.wx_pay = wx_pay
         self.membership_order_repo = membership_order_repo
+        self.order_repo = order_repo
 
     async def handle_membership_order(self, out_trade_no, resource):
         async with self.membership_order_repo.session as session:
@@ -33,6 +35,16 @@ class UnifiedPayCallback:
             mo_obj.paid_from_wx(resource)
             flag_modified(mo_obj, "extend_property")
             await self.membership_order_repo.add(session, mo_obj)
+
+    async def handle_order(self, out_trade_no, resource):
+        async with self.order_repo.session as session:
+            _, bo_list = await self.order_repo.get_list(session, equal_maps={"out_trade_no": out_trade_no}, with_total=False)
+            if not bo_list:
+                raise FastapiResult(result={**self.FAIL_RESPONSE})
+            bo_obj = bo_list[0]
+            bo_obj.paid_from_wx(resource)
+            flag_modified(bo_obj, "extend_property")
+            await self.order_repo.add(session, mo_obj)
 
 
     async def execute(self, headers, body) -> None:

@@ -2,35 +2,10 @@ import datetime
 from typing import List
 from js_kits.fastapi_kits.enum_base import EnumDescriptions
 from apps.domain.entities.base import Entity
+from apps.domain.entities.order_base import OrderStatus, OrderBase
 
 
-class OrderStatus(EnumDescriptions):
-    # 已下单、已支付、已出库、已签收、已售后（部分退款、退货退款）
-    Ordered = 1  # 已下单-未支付
-    Payed = 2  # 已支付 【付款方式有不同：即有货到付款的‘支付’方式】
-    Confirmed = 3  # 系统已确认【可以发货】
-    OutStocked = 4  # 已出库
-    Signed = 5  # 已签收：物流员定的
-    UserConfirmed = 6  # 用户确认
-    UserCancelled = 7  # 已取消
-    SystemCancelled = 8  # 系统已取消
-    Finished = 9  # 已结束
-    Deleted = 10  # 已删除
-
-    @staticmethod
-    def user_can_changed():
-        return [OrderStatus.Ordered.value,
-                OrderStatus.Payed.value,
-                OrderStatus.Confirmed.value,
-                OrderStatus.OutStocked.value,]
-
-    @staticmethod
-    def user_can_changed_to():
-        return [OrderStatus.UserCancelled.value,
-               ]
-
-
-class OrderEntity(Entity):
+class OrderEntity(OrderBase):
     """
     订单
     """
@@ -104,22 +79,22 @@ class OrderEntity(Entity):
         self.pay_time = datetime.datetime.now()
         self.real_pay = self.total - self.discount
 
-    def to_dict(self):
-        base = {
-            "id": self.id,
-            "main_info": self.main_info,
-            "uid": self.uid,
-            "real_pay": self.real_pay,
-            "total": self.total,
-            "count": self.count,
-            "discount": self.discount,
-            "status": self.status,
-            "balance": self.balance,
-            "coins": self.coins,
-            "coupon_id_list": self.coupon_id_list,
-            "feedback_coins": self.feedback_coins,
-            "payment_id_list": self.payment_id_list,
-            "delivery_id_list": self.delivery_id_list,
-            "extend_property": self.extend_property,
-        }
-        return base
+    # def to_dict(self):
+    #     base = {
+    #         "id": self.id,
+    #         "main_info": self.main_info,
+    #         "uid": self.uid,
+    #         "real_pay": self.real_pay,
+    #         "total": self.total,
+    #         "count": self.count,
+    #         "discount": self.discount,
+    #         "status": self.status,
+    #         "balance": self.balance,
+    #         "coins": self.coins,
+    #         "coupon_id_list": self.coupon_id_list,
+    #         "feedback_coins": self.feedback_coins,
+    #         "payment_id_list": self.payment_id_list,
+    #         "delivery_id_list": self.delivery_id_list,
+    #         "extend_property": self.extend_property,
+    #     }
+    #     return base
