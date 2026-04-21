@@ -1,6 +1,5 @@
 import logging
 from js_kits.except_kits.except_kits import FastapiResult, ClientError
-from apps.domain.entities.membership_order import MembershipOrderStatus
 from apps.domain.repo.repo_membership_order import MembershipOrderRepository
 
 logger = logging.getLogger(__name__)

@@ -14,7 +14,7 @@ from apps.use_case.pay.unified_pay_callback import UnifiedPayCallback
 from apps.use_case.membership.query_membership_order import QueryMembershipOrder
 from main.controllers.check_auth import auth
 from main.controllers.output.membership import MembershipListResponse, CreateUserMembershipResponse
-from main.controllers.input.membership import CreateUserMembershipParams
+from main.controllers.input.membership import CreateUserMembershipParams, QueryMembershipOrderParams
 
 router_membership = APIRouter(route_class=UserRoute, prefix="/membership", tags=["会员"])
 logger = logging.getLogger(__name__)
@@ -93,8 +93,7 @@ async def get_membership_orders(request: Request,
                                 redis_client: Redis = Injected(Redis),
                                 user_repo: UserRepository = Injected(UserRepository),
                                 uid=None,
-                                out_trade_no: str = None,
-                                status: int = None,
+                                params: QueryMembershipOrderParams = Depends(),
                                 use_case: QueryMembershipOrder = Injected(QueryMembershipOrder)):
     """查询用户的会员订单列表"""
-    await use_case.query(uid, out_trade_no, status)
+    await use_case.query(uid, params.out_trade_no, params.status)
