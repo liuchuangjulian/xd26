@@ -3,12 +3,9 @@ from fastapi_injector import Injected
 from fastapi import APIRouter, Request, Depends, Body
 import logging
 from js_kits.fastapi_kits.user_route import UserRoute
-from js_kits.except_kits.except_kits import FastapiResult
 from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.membership.query_membership import QueryMembership
-from apps.use_case.membership.create_user_membership import UseCaseCreateUserMembership
 from apps.use_case.membership.create_membership_order import CreateMembershipOrder
-from apps.use_case.membership.handle_membership_pay_callback import HandleMembershipPayCallback
 from apps.use_case.pay.unified_pay_callback import UnifiedPayCallback
 from apps.use_case.membership.query_membership_order import QueryMembershipOrder
 from main.controllers.check_auth import auth
@@ -30,26 +27,6 @@ async def get_membership_list(request: Request,
 '''
 curl -X 'GET' 'http://localhost:8080/api/membership/list' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' | jq .
 '''
-
-
-# @router_membership.post("/create", response_model=CreateUserMembershipResponse)
-# @auth
-# async def create_user_membership(request: Request,
-#                                  redis_client: Redis = Injected(Redis),
-#                                  user_repo: UserRepository = Injected(UserRepository),
-#                                  uid=None,
-#                                  params: CreateUserMembershipParams = Body(...),
-#                                  use_case: UseCaseCreateUserMembership = Injected(UseCaseCreateUserMembership)):
-#     """【旧接口，已废弃】直接开通会员（不经过支付）"""
-#     await use_case.execute(uid, params.membership_id)
-# '''
-# curl -X 'POST' \
-#   'http://localhost:8080/api/membership/create' \
-#   -H 'accept: application/json' \
-#   -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' \
-#   -H 'Content-Type: application/json' \
-#   -d '{"membership_id": 1}' | jq .
-# '''
 
 
 @router_membership.post("/buy", summary="购买会员（创建支付订单）")
