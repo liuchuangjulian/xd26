@@ -44,7 +44,7 @@ class UnifiedPayCallback:
             bo_obj = bo_list[0]
             bo_obj.paid_from_wx(resource)
             flag_modified(bo_obj, "extend_property")
-            await self.order_repo.add(session, mo_obj)
+            await self.order_repo.add(session, bo_obj)
 
 
     async def execute(self, headers, body) -> None:
@@ -66,5 +66,3 @@ class UnifiedPayCallback:
             raise FastapiResult({'code': 'FAILED', 'message': '回调验证失败'})
         logger.info(f"收到支付回调 resource:{result.get('resource')}")
         return result.get('resource').get('out_trade_no'), result.get('resource')
-
-
