@@ -7,6 +7,7 @@ from js_kits.fastapi_kits.input import PageParams
 from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.pay.query_transfer_record import QueryTransferRecord
 from main.controllers.check_auth import auth
+from main.controllers.input.transfer_record import QueryTransferRecordParams
 
 router_transfer_record = APIRouter(route_class=UserRoute, prefix="/transfer_record", tags=["交易记录"])
 logger = logging.getLogger(__name__)
@@ -20,18 +21,13 @@ async def get_transfer_record_list(
         user_repo: UserRepository = Injected(UserRepository),
         uid=None,
         page_params: PageParams = Depends(),
-        status: str = None,
-        type: str = None,
+        params: QueryTransferRecordParams = Depends(),
         use_case: QueryTransferRecord = Injected(QueryTransferRecord),
 ):
-    """查询交易记录列表
-
-    参数:
-    - status: 状态筛选 (paid, un_pay 等)
-    - type: 类型筛选 (recharge, redemption, coin 等)
     """
-    await use_case.query(uid, status, type, page_params.page, page_params.page_size)
+    查询交易记录列表
+    """
+    await use_case.query(uid, params.status, params.type, page_params.page, page_params.page_size)
 '''
-curl -X 'GET' 'http://localhost:8080/api/transfer-record/list?page=1&page_size=10' -H 'token: xxx' | jq .
 curl -X 'GET' 'http://localhost:8080/api/transfer-record/list?page=1&page_size=10&type=redemption' -H 'token: xxx' | jq .
 '''

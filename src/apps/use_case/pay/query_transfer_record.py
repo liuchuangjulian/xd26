@@ -11,10 +11,8 @@ class QueryTransferRecord:
 
     async def query(self, uid, status, type, page, page_size) -> None:
         equal_maps = {"uid": uid}
-
         if status:
             equal_maps["status"] = status
-
         if type:
             equal_maps["type"] = type
 
@@ -26,31 +24,10 @@ class QueryTransferRecord:
                 equal_maps=equal_maps,
                 order_by_list=["-created_at"],
             )
-
-            # 格式化返回数据
-            data = []
-            for obj in record_list:
-                extra = obj.extra or {}
-                item = {
-                    "id": obj.id,
-                    "type": obj.type,
-                    "amount": obj.amount / 100,  # 分转元
-                    "amount_real": obj.amount_real / 100,
-                    "amount_gift": obj.amount_gift / 100,
-                    "status": obj.status,
-                    "created_at": obj.created_at.strftime("%Y-%m-%d %H:%M:%S") if obj.created_at else ""
-                }
-
-                # 兑换卡记录的特殊字段
-                if obj.type == "redemption":
-                    item["card_number"] = extra.get("card_number", "")
-
-                data.append(item)
-
             raise FastapiResult({
                 "msg": "ok",
                 "total": total,
                 "page": page,
                 "page_size": page_size,
-                "data": data
+                "data": [record.to_dict() for record in record_list]
             })

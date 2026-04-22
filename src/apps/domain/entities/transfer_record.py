@@ -57,7 +57,25 @@ class TransferRecord(Entity):
     #         self.coin_count = 0
     #         self.op_user_id = ""
 
+
+
     def to_dict(self):
+        # 格式化返回数据
+        # data = []
+        # for obj in record_list:
+        #     extra = obj.extra or {}
+        #     item = {
+        #         "id": obj.id,
+        #         "type": obj.type,
+        #         "amount": obj.amount / 100,  # 分转元
+        #         "amount_real": obj.amount_real / 100,
+        #         "amount_gift": obj.amount_gift / 100,
+        #         "status": obj.status,
+        #         "created_at": obj.created_at.strftime("%Y-%m-%d %H:%M:%S") if obj.created_at else ""
+        #     }
+        #     # 兑换卡记录的特殊字段
+        #     if obj.type == "redemption":
+        #         item["card_number"] = extra.get("card_number", "")
         return {
             "id": self.id,
             "type": self.type,
