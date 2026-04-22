@@ -22,13 +22,19 @@ class RedemptionCard(Entity):
 
     def do_record(self, uid):
         from apps.domain.entities.transfer_record import TransferRecord, RecordType, RecordStatus
+        amount_cents = int(self.amount * 100)  # 转换为分
         return TransferRecord(type=RecordType.Redemption.value,
                                 uid=uid,
-                                amount=self.amount,
-                                amount_real=self.amount,
+                                amount=amount_cents,
+                                amount_real=amount_cents,
+                                amount_gift=0,
+                                amount_coin_count=0,
+                                op_uid=uid,
                                 status=RecordStatus.Paid.value,
                                 extra={
                                     "redemption_card_id": self.id,
+                                    "card_number": self.card_number,
+                                    "amount": float(self.amount)
                                     }
                                 )
 

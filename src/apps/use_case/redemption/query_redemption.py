@@ -16,7 +16,7 @@ class QueryRedemptionHistory:
             # 查询用户的兑换记录（按类型筛选兑换记录）
             total, obj_list = await self.repo.get_list(
                 session,
-                equal_maps={"user_id": str(uid), "type": RecordType.Redemption.value},
+                equal_maps={"uid": uid, "type": RecordType.Redemption.value},
                 page=page,
                 page_size=page_size,
                 order_by_list=["-created_at"]

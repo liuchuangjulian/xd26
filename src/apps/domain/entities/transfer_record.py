@@ -32,12 +32,12 @@ class TransferRecord(Entity):
     # 流通记录
     id: int  # 主键
     type: str  # 记录类型 余额消费、线下消费、充值、积分消费
-    uid: str  # 用户id
+    uid: int  # 用户id
     amount: int  # 交易金额 单位分
     amount_real: int  # 实际金额 单位分
     amount_gift: int  # 赠送金额 单位分
     amount_coin_count: int  # 积分
-    op_uid: str  # 操作用户id，自己或者工作人员
+    op_uid: int  # 操作用户id，自己或者工作人员
     status: str  # 状态
     extra: dict  # 附加属性
     created_at: DateTime  # 创建时间
