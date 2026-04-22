@@ -8,7 +8,7 @@ from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.pay.query_transfer_record import QueryTransferRecord
 from main.controllers.check_auth import auth
 
-router_transfer_record = APIRouter(route_class=UserRoute, prefix="/transfer-record", tags=["交易记录"])
+router_transfer_record = APIRouter(route_class=UserRoute, prefix="/transfer_record", tags=["交易记录"])
 logger = logging.getLogger(__name__)
 
 
