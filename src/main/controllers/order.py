@@ -35,9 +35,6 @@ curl -X 'POST' \
   -H 'accept: application/json' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' \
   -H 'Content-Type: application/json' \
   -d '{"coupon_id": 0, "p_id_count_list": [{"p_id": 1,"count": 1}]}' | jq .
-
-# coupon_id=0 表示自动选择最优优惠券
-# coupon_id>0 表示使用指定的优惠券ID
 '''
 
 
