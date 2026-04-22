@@ -41,7 +41,7 @@ class Coupon(Entity):
     title: str  # 运费优惠券
     price: int  # 面额，600，单位份
     limit: int  # 满多少才可使用，-1表示没有限制
-    uid: int
+    uid: int  # -1为所有人同时拥有
     extend_property: dict
     effected_at: datetime.date  # 生效日期
     expired_at: datetime.date  # 过期日期
@@ -73,7 +73,8 @@ class Coupon(Entity):
                 return True
         return False
 
-    def calc_discount(self, total):
+    def calc_discount(self, order_line_list):
+        total = sum([p.amount for p in order_line_list])
         # 计算折扣金额 (total单位为分)
         if self.can_use(total):
             if self.coupon_type == CouponType.SpendOff.value:
