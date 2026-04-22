@@ -35,6 +35,8 @@ class UnifiedPayCallback:
             mo_obj.paid_from_wx(resource)
             flag_modified(mo_obj, "extend_property")
             await self.membership_order_repo.add(session, mo_obj)
+            membership_obj = mo_obj.create_membership()
+            await self.membership_order_repo.add(session, membership_obj)
 
     async def handle_order(self, out_trade_no, resource):
         async with self.order_repo.session as session:

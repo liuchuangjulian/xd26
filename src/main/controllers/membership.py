@@ -42,8 +42,6 @@ async def buy_membership(request: Request,
 
 
 
-
-
 @router_membership.get("/orders", summary="查询会员订单")
 @auth
 async def get_membership_orders(request: Request,
