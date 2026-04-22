@@ -1,7 +1,5 @@
 import datetime
 from typing import List
-from js_kits.fastapi_kits.enum_base import EnumDescriptions
-from apps.domain.entities.base import Entity
 from apps.domain.entities.order_base import OrderStatus, OrderBase
 
 
@@ -31,16 +29,6 @@ class OrderEntity(OrderBase):
     created_at: datetime.datetime
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
-    #
-    # def __init__(self, *args, **kwargs):
-    #     _annotations_dict = getattr(self, "__annotations__")
-    #     for kwarg, value in kwargs.items():
-    #         if kwarg in _annotations_dict:
-    #             setattr(self, kwarg, value)
-    #     self.coupon_id_list = self.coupon_id_list if self.coupon_id_list else []
-    #     self.payment_id_list = self.payment_id_list if self.payment_id_list else []
-    #     self.delivery_id_list = self.delivery_id_list if self.delivery_id_list else []
-    #     self.status = self.status if self.status else OrderStatus.Ordered.value
 
     def refresh_data_from_ol(self, ol_list):
         self.count = sum([ol.count for ol in ol_list])
@@ -78,23 +66,3 @@ class OrderEntity(OrderBase):
         self.transaction_id = transaction_id
         self.pay_time = datetime.datetime.now()
         self.real_pay = self.total - self.discount
-
-    # def to_dict(self):
-    #     base = {
-    #         "id": self.id,
-    #         "main_info": self.main_info,
-    #         "uid": self.uid,
-    #         "real_pay": self.real_pay,
-    #         "total": self.total,
-    #         "count": self.count,
-    #         "discount": self.discount,
-    #         "status": self.status,
-    #         "balance": self.balance,
-    #         "coins": self.coins,
-    #         "coupon_id_list": self.coupon_id_list,
-    #         "feedback_coins": self.feedback_coins,
-    #         "payment_id_list": self.payment_id_list,
-    #         "delivery_id_list": self.delivery_id_list,
-    #         "extend_property": self.extend_property,
-    #     }
-    #     return base
