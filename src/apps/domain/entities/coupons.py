@@ -49,6 +49,12 @@ class Coupon(Entity):
     updated_at: datetime.datetime
     deleted_at: datetime.datetime
 
+
+    def can_user_use(self, uid):
+        if uid == self.uid or self.uid == -1:
+            return True
+        return False
+
     def get_none_coupon(self):
         self.price = 0
         self.limit = -1

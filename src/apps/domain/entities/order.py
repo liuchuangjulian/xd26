@@ -21,6 +21,7 @@ class OrderEntity(OrderBase):
     feedback_coins: int  # 回馈积分
     payment_id_list: List[int]  # 支付id列表
     delivery_id_list: List[int]  # 配送id列表
+    address_id: int  # 收货地址ID
     # 微信支付相关字段
     out_trade_no: str  # 商户订单号
     transaction_id: str  # 微信支付订单号
@@ -37,7 +38,9 @@ class OrderEntity(OrderBase):
         self.main_info = ",".join([ol.name for ol in ol_list[:2]]) + f"等{self.count}件商品"
 
     def set_address_obj(self, address_obj):
-        # 地址信息放在订单里面，如果外面地址修改，不影响订单本身
+        """设置收货地址"""
+        self.address_id = address_obj.id
+        # 将地址详情快照保存到扩展属性中
         if not isinstance(self.extend_property, dict):
             self.extend_property = {}
         self.extend_property["address"] = address_obj.to_dict()

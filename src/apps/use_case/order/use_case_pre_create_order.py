@@ -76,10 +76,8 @@ class UseCasePreCreateOrder:
                 best_coupon, discount = await self.calc_best_coupon(session, uid, raw_total)
             # 计算配送费
             delivery_fee = self.calc_delivery_fee(raw_total)
-
             # 计算最终总价
             total = max(raw_total - discount + delivery_fee, 0)
-
             raise FastapiResult({
                 "raw_total": str(round(raw_total / 100, 2)),
                 "delivery_fee": str(round(delivery_fee / 100, 2)),
