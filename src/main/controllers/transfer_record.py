@@ -21,9 +21,17 @@ async def get_transfer_record_list(
         uid=None,
         page_params: PageParams = Depends(),
         status: str = None,
+        type: str = None,
         use_case: QueryTransferRecord = Injected(QueryTransferRecord),
 ):
-    await use_case.query(uid, status, page_params.page, page_params.page_size)
+    """查询交易记录列表
+
+    参数:
+    - status: 状态筛选 (paid, un_pay 等)
+    - type: 类型筛选 (recharge, redemption, coin 等)
+    """
+    await use_case.query(uid, status, type, page_params.page, page_params.page_size)
 '''
-curl -X 'GET' 'http://localhost:8080/api/transfer-record/list?page=1&page_size=10&status=paid' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' | jq .
+curl -X 'GET' 'http://localhost:8080/api/transfer-record/list?page=1&page_size=10' -H 'token: xxx' | jq .
+curl -X 'GET' 'http://localhost:8080/api/transfer-record/list?page=1&page_size=10&type=redemption' -H 'token: xxx' | jq .
 '''

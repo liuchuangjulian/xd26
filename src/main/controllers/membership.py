@@ -6,7 +6,6 @@ from js_kits.fastapi_kits.user_route import UserRoute
 from apps.domain.repo.repo_user import UserRepository
 from apps.use_case.membership.query_membership import QueryMembership
 from apps.use_case.membership.create_membership_order import CreateMembershipOrder
-from apps.use_case.pay.unified_pay_callback import UnifiedPayCallback
 from apps.use_case.membership.query_membership_order import QueryMembershipOrder
 from main.controllers.check_auth import auth
 from main.controllers.output.membership import MembershipListResponse, CreateUserMembershipResponse
