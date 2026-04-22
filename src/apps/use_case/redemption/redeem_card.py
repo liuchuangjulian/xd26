@@ -15,43 +15,36 @@ class RedeemCardUseCase:
         self.user_repo = user_repo
         self.redemption_repo = redemption_repo
 
+    async def get_redemption_card(self, session, card_number):
+        card = await self.redemption_repo.get_card_by_number(session, card_number)
+        if not card:
+            raise ClientError({"msg": "兑换卡不存在"})
+        is_valid, error_msg = card.is_valid()
+        if not is_valid:
+            raise ClientError({"msg": error_msg})
+        return card
+
+    async def add_user_balance(self, session, uid, amount):
+        _, user_list = await self.user_repo.get_list(
+            session,
+            equal_maps={"id": uid},
+            with_total=False
+        )
+        if not user_list:
+            raise ClientError({"msg": "用户不存在"})
+        user = user_list[0]
+        current_balance = Decimal(str(user.balance)) if user.balance else Decimal('0.00')
+        new_balance = current_balance + Decimal(str(amount))
+        user.balance = new_balance
+        await self.user_repo.add(session, user)
+
     async def execute(self, uid, card_number):
         """执行兑换操作"""
+        logger.info(f"开始兑换：uid={uid}, card_number={card_number}")
         try:
             async with self.user_repo.session as session:
-                logger.info(f"开始兑换：uid={uid}, card_number={card_number}")
-
-                # 1. 查询兑换卡
-                card = await self.redemption_repo.get_card_by_number(session, card_number)
-
-                if not card:
-                    raise ClientError({"msg": "兑换卡不存在"})
-
-                logger.info(f"兑换卡信息：{card.to_dict()}")
-
-                # 2. 检查卡状态
-                is_valid, error_msg = card.is_valid()
-                if not is_valid:
-                    raise ClientError({"msg": error_msg})
-
-                # 3. 获取用户当前余额
-                _, user_list = await self.user_repo.get_list(
-                    session,
-                    equal_maps={"id": uid},
-                    with_total=False
-                )
-
-                if not user_list:
-                    raise ClientError({"msg": "用户不存在"})
-
-                user = user_list[0]
-                current_balance = Decimal(str(user.balance)) if user.balance else Decimal('0.00')
-                logger.info(f"用户当前余额：{current_balance}")
-
-                # 4. 更新用户余额
-                new_balance = current_balance + Decimal(str(card.amount))
-                user.balance = new_balance
-                await self.user_repo.add(session, user)
+                card = await self.get_redemption_card(session, card_number)
+                await self.add_user_balance(session, uid, card.amount)
 
                 # 5. 标记兑换卡为已使用
                 await self.redemption_repo.mark_card_as_used(session, card, uid)
