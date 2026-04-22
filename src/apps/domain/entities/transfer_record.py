@@ -8,7 +8,8 @@ type_map = {
     "user_pay": "自助付款",
     "consume": "余额消费",
     "offline": "线下消费",
-    "coin": "积分"
+    "coin": "积分",
+    "redemption": "兑换卡兑换"
 }
 
 
@@ -17,12 +18,14 @@ class RecordType(enum.Enum):
     Purchase = "purchase"  # 购买
     OfflineRecharge = "offline_recharge"  # 线下充值
     Coin = "coin"  # 积分兑换
+    Redemption = "redemption"  # 兑换卡兑换
 
 
 class RecordStatus(enum.Enum):
     UnPay = "un_pay"  # 充值未支付
     Paid = "paid"  # 充值已经支付
     AmountError = "amount_error"  # 支付金额与约定金额不一致
+    Ok = "ok"
 
 
 class TransferRecord(Entity):
@@ -60,11 +63,10 @@ class TransferRecord(Entity):
             "type": self.type,
             "status": self.status,
             "type_cn": type_map.get(self.type),
-            "shop_id": self.shop_id,
             "amount": f"{self.amount/100:.2f}",
-            "real": f"{self.real/100:.2f}",
-            "gift": f"{self.gift/100:.2f}",
-            "coin_count": self.coin_count,
+            "amount_real": f"{self.amount_real/100:.2f}",
+            "amount_gift": f"{self.amount_gift/100:.2f}",
+            "amount_coin_count": self.amount_coin_count,
             "created_at": str(self.created_at),
         }
 

@@ -1,19 +1,18 @@
 import logging
 from decimal import Decimal
-from datetime import datetime
-from js_kits.except_kits.except_kits import FastapiResult, ClientError
+from js_kits.except_kits.except_kits import FastapiResult, ClientError, BackendException
 from apps.domain.repo.repo_user import UserRepository
 from apps.domain.repo.repo_redemption import RedemptionRepository
-from apps.domain.entities.redemption_card import RedemptionCard
-from apps.domain.entities.redemption_history import RedemptionHistory
+from apps.domain.repo.repo_transfer_record import TransferRecordRepository
 
 logger = logging.getLogger(__name__)
 
 
 class RedeemCardUseCase:
-    def __init__(self, user_repo: UserRepository, redemption_repo: RedemptionRepository):
+    def __init__(self, user_repo: UserRepository, redemption_repo: RedemptionRepository, transfer_record_repo: TransferRecordRepository):
         self.user_repo = user_repo
         self.redemption_repo = redemption_repo
+        self.transfer_record_repo = transfer_record_repo
 
     async def get_redemption_card(self, session, card_number):
         card = await self.redemption_repo.get_card_by_number(session, card_number)
@@ -37,6 +36,7 @@ class RedeemCardUseCase:
         new_balance = current_balance + Decimal(str(amount))
         user.balance = new_balance
         await self.user_repo.add(session, user)
+        return current_balance, new_balance
 
     async def execute(self, uid, card_number):
         """执行兑换操作"""
@@ -44,21 +44,11 @@ class RedeemCardUseCase:
         try:
             async with self.user_repo.session as session:
                 card = await self.get_redemption_card(session, card_number)
-                await self.add_user_balance(session, uid, card.amount)
-
-                # 5. 标记兑换卡为已使用
-                await self.redemption_repo.mark_card_as_used(session, card, uid)
-
-                # 6. 创建兑换记录
-                history = RedemptionHistory(
-                    uid=uid,
-                    card_number=card_number,
-                    amount=card.amount,
-                    status=1,
-                    redemption_time=datetime.now()
-                )
-                await self.redemption_repo.add(session, history)
-
+                current_balance, new_balance = await self.add_user_balance(session, uid, card.amount)
+                card.mark_as_used(uid)
+                record = card.do_record(uid)
+                await self.transfer_record_repo.add(session, card)
+                await self.transfer_record_repo.add(session, record)
                 logger.info(f"兑换成功：uid={uid}, amount={card.amount}, new_balance={new_balance}")
 
                 raise FastapiResult({
@@ -72,4 +62,4 @@ class RedeemCardUseCase:
                 })
         except Exception as e:
             logger.error(f"兑换失败：{e}", exc_info=True)
-            raise
+            raise BackendException()

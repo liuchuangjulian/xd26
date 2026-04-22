@@ -59,8 +59,8 @@ class RedemptionRepository(BaseRepository):
         result = await session.execute(stmt)
         return result.scalars().first()
 
-    async def mark_card_as_used(self, session, card: RedemptionCard, uid: int) -> bool:
-        """标记兑换卡为已使用"""
-        card.mark_as_used(uid)
-        return await self.add(session, card)
+    # async def mark_card_as_used(self, session, card: RedemptionCard, uid: int) -> bool:
+    #     """标记兑换卡为已使用"""
+    #     card.mark_as_used(uid)
+    #     return await self.add(session, card)
 

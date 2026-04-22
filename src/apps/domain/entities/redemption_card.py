@@ -4,6 +4,7 @@ from decimal import Decimal
 from apps.domain.entities.base import Entity
 
 
+
 class RedemptionCard(Entity):
     """
     兑换卡
@@ -18,6 +19,18 @@ class RedemptionCard(Entity):
     deleted_at: Optional[datetime]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
+
+    def do_record(self, uid):
+        from apps.domain.entities.transfer_record import TransferRecord, RecordType, RecordStatus
+        return TransferRecord(type=RecordType.Redemption.value,
+                                uid=uid,
+                                amount=self.amount,
+                                amount_real=self.amount,
+                                status=RecordStatus.Paid.value,
+                                extra={
+                                    "redemption_card_id": self.id,
+                                    }
+                                )
 
 
     def is_valid(self):
