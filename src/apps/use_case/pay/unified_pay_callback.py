@@ -2,6 +2,7 @@ import logging
 from js_kits.except_kits.except_kits import FastapiResult
 from wechatpayv3 import WeChatPay
 from sqlalchemy.orm.attributes import flag_modified
+from apps.domain.entities.user_membership import UserMembershipEntity
 from apps.domain.repo.repo_membership_order import MembershipOrderRepository
 from apps.domain.repo.repo_order import OrderRepository
 
@@ -35,7 +36,10 @@ class UnifiedPayCallback:
             mo_obj.paid_from_wx(resource)
             flag_modified(mo_obj, "extend_property")
             await self.membership_order_repo.add(session, mo_obj)
-            membership_obj = mo_obj.create_membership()
+
+            _, existing_memberships = await self.membership_order_repo.get_list(session, Entity=UserMembershipEntity,
+                                                                             equal_maps={"uid": mo_obj.uid}, with_total=False)
+            membership_obj = mo_obj.create_membership(existing_memberships)
             await self.membership_order_repo.add(session, membership_obj)
 
     async def handle_order(self, out_trade_no, resource):

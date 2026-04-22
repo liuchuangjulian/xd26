@@ -1,6 +1,8 @@
 import datetime
 from apps.domain.entities.order_base import OrderStatus, OrderBase
-
+from apps.domain.entities.user_membership import UserMembershipEntity
+from random import sample
+from string import digits
 
 
 class MembershipOrderEntity(OrderBase):
@@ -35,6 +37,24 @@ class MembershipOrderEntity(OrderBase):
         self.status = OrderStatus.Paid.value
         self.transaction_id = transaction_id
         self.pay_time = datetime.datetime.now()
+
+    def create_membership(self, existing_memberships=None):
+        """创建用户会员记录"""
+        start_day = datetime.date.today()
+        duration = self.membership_info.get("duration", 0)
+        end_day = start_day + datetime.timedelta(days=duration)
+
+        if existing_memberships:
+            latest_membership = max(existing_memberships, key=lambda x: x.end_day)
+            if latest_membership.end_day >= start_day:
+                start_day = latest_membership.end_day
+                end_day = start_day + datetime.timedelta(days=duration)
+        return UserMembershipEntity(uid=self.uid,
+                                   membership_id=self.membership_id,
+                                   membership_info=self.membership_info,
+                                   start_day=start_day, end_day=end_day,
+                                   extend_property={"order_id": self.id},
+                                   )
 
     # def to_dict(self):
     #     return {
