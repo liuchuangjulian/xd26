@@ -26,6 +26,7 @@ async def create_order(request: Request, redis_client: Redis = Injected(Redis),
                        user_repo: UserRepository = Injected(UserRepository), uid=None,
                        params: PreCreateOrderParams = Body(...),
                        use_case: UseCasePreCreateOrder = Injected(UseCasePreCreateOrder)):
+    """预创建订单，计算价格"""
     await use_case.execute(uid, [{"count": product_count.count, "p_id": product_count.p_id}
                                  for product_count in params.p_id_count_list],
                                  coupon_id=params.coupon_id)

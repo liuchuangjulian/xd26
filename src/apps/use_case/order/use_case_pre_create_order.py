@@ -59,13 +59,6 @@ class UseCasePreCreateOrder:
             return 600  # 6.00元
 
     async def execute(self, uid, p_id_count_list, coupon_id=0) -> None:
-        """预创建订单，返回详细订单信息
-
-        Args:
-            uid: 用户ID
-            p_id_count_list: 商品列表 [{"p_id": 1, "count": 2}]
-            coupon_id: 优惠券ID，0表示自动选择最优优惠券
-        """
         p_id_map = {item["p_id"]: item["count"] for item in p_id_count_list}
         print(f"DEBUG: 预创建订单: uid={uid}, p_id_map={p_id_map}, coupon_id={coupon_id}")
 
