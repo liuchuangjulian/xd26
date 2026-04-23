@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 @router_order.post("/pre_create", response_model=PreCreateOrderResponse)
 @auth
-async def create_order(request: Request, redis_client: Redis = Injected(Redis),
+async def pre_create_order(request: Request, redis_client: Redis = Injected(Redis),
                        user_repo: UserRepository = Injected(UserRepository), uid=None,
                        params: PreCreateOrderParams = Body(...),
                        use_case: UseCasePreCreateOrder = Injected(UseCasePreCreateOrder)):
