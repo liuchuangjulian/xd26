@@ -42,22 +42,16 @@ class UseCaseCreateOrder:
                 raise ClientError({"msg": "产品异常"})
             order_obj = OrderEntity(uid=uid)
             await self.repo.add(session, order_obj)
-            ol_list = []
-            for index, p_obj in enumerate(product_list):
-                ol_list.append(OrderLineEntity(order_id=order_obj.id,
-                                               uid=uid,
-                                               p_id=p_obj.id,
-                                               barcode=p_obj.barcode,
-                                               name=p_obj.name,
-                                               price=p_obj.price,
-                                               index=index,
-                                               count=p_id_map[p_obj.id],
-                                               ))
+            ol_list = [OrderLineEntity.build_from_product_with_order_id(p_obj, p_id_map[p_obj.id], order_obj.id, this_index) for this_index, p_obj in enumerate(product_list)]
+
             await self.repo.add_all(session, ol_list)
             order_obj.refresh_data_from_ol(ol_list)
             order_obj.set_address_obj(address_obj)
-            order_obj.set_coupon_obj(coupon_obj)
+            if order_obj.set_coupon_obj(coupon_obj):
+                discount = coupon_obj.calc_discount()
+                order_obj.discount = discount
             await self.repo.add(session, order_obj)
+            await self.repo.add(session, coupon_obj)
             raise FastapiResult({"msg": "ok",
                                  "data": order_obj.id
                                  })

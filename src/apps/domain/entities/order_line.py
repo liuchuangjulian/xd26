@@ -30,9 +30,10 @@ class OrderLineEntity(Entity):
         self.amount = self.count * self.price
         return self
 
-    def build_from_product_with_order_id(self, p_obj, count, order_id):
+    def build_from_product_with_order_id(self, p_obj, count, order_id, index):
         self.build_from_product(p_obj, count)
         self.order_id = order_id
+        self.index = index
         return self
 
     def to_dict(self):

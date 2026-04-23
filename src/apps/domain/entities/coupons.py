@@ -61,12 +61,6 @@ class Coupon(Entity):
         self.coupon_type = CouponType.NoneType.value
         return self
 
-    # def __init__(self, *args, **kwargs):
-    #     _annotations_dict = getattr(self, "__annotations__")
-    #     for kwarg, value in kwargs.items():
-    #         if kwarg in _annotations_dict:
-    #             setattr(self, kwarg, value)
-
     def can_use(self, total):
         # 是否可以用
         if self.effected_at and self.expired_at and self.effected_at <= datetime.datetime.now().date() <= self.expired_at:

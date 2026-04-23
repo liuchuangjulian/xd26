@@ -47,9 +47,11 @@ class OrderEntity(OrderBase):
 
     def set_coupon_obj(self, coupon_obj):
         # 地址信息放在订单里面，如果外面地址修改，不影响订单本身
-        if coupon_obj and coupon_obj.can_use(self.total):
+        if coupon_obj and coupon_obj.can_user_use(self.uid) and coupon_obj.can_use(self.total):
             self.coupon_id_list.append(coupon_obj.to_dict())
-            self.discount = sum([coupon["price"] for coupon in self.coupon_id_list])
+            return True
+            # self.discount = sum([coupon["price"] for coupon in self.coupon_id_list])
+        return False
 
     def description(self):
         return self.main_info
