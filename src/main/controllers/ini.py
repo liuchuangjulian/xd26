@@ -11,3 +11,6 @@ logger = logging.getLogger(__name__)
 @router_api_ini.get("")
 async def ini(use_case: IniUseCase = Injected(IniUseCase)):
     await use_case.execute()
+'''
+curl -X 'GET' 'http://localhost:8080/api/ini' | jq .
+'''

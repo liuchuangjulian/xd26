@@ -38,6 +38,12 @@ async def buy_membership(request: Request,
                         use_case: CreateMembershipOrder = Injected(CreateMembershipOrder)):
     """购买会员，创建微信支付订单"""
     await use_case.execute(uid, params.membership_id)
+'''
+curl -X 'POST' 'http://localhost:8080/api/membership/buy' \
+  -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' \
+  -H 'Content-Type: application/json' \
+  -d '{"membership_id": 1}' | jq .
+'''
 
 
 
@@ -51,3 +57,6 @@ async def get_membership_orders(request: Request,
                                 use_case: QueryMembershipOrder = Injected(QueryMembershipOrder)):
     """查询用户的会员订单列表"""
     await use_case.query(uid, params.out_trade_no, params.status)
+'''
+curl -X 'GET' 'http://localhost:8080/api/membership/orders?status=1' -H 'token: 7539b33b-a066-4dbc-b90c-f1f038fa429b' | jq .
+'''
