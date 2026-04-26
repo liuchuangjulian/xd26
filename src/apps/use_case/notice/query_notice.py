@@ -13,7 +13,6 @@ class QueryNotice:
         async with self.repo.session as session:
             _, obj_list = await self.repo.get_list(session,
                                                    equal_maps={"key": "notice", "is_active": 1}, with_total=False)
-            print(obj_list)
             if obj_list:
                 raise FastapiResult({"data": obj_list[0].extend_property})
             else:

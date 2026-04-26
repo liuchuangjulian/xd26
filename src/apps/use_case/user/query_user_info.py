@@ -2,7 +2,6 @@ import logging
 import random
 from datetime import date
 from js_kits.except_kits.except_kits import FastapiResult, ClientError
-from sqlalchemy import false
 from apps.domain.entities.config import ConfigEntity
 from apps.domain.repo.repo_user import UserRepository
 from apps.domain.repo.repo_user_membership import UserMembershipRepository
@@ -41,7 +40,7 @@ class QueryUserInfo:
             )
             # 判断是否有任何会员记录的 end_day 大于等于今天
             today = date.today()
-            is_member = false
+            is_member = False
             for user_membership in user_membership_list:
                 if user_membership.start_day <= today <= user_membership.end_day:
                     is_member = True
