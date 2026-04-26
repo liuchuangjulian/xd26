@@ -40,5 +40,11 @@ class ProductRepository(BaseRepository):
                                                        img="https://xd8.oss-cn-shanghai.aliyuncs.com/for_test_img.png",
                                                        original_price=600, price=500, units="瓶", describe="描述信息",
                                                        extend_property={}))
+
+                await self.add(session, ProductsEntity(id=2, name="梦之蓝", show_index=2, category_id_list=[1],
+                                                       barcode="1234564", tips={}, sold=1,
+                                                       img="https://xd8.oss-cn-shanghai.aliyuncs.com/for_test_img.png",
+                                                       original_price=6000, price=5000, units="瓶", describe="描述信息",
+                                                       extend_property={}))
             except Exception as e:
                 ...
