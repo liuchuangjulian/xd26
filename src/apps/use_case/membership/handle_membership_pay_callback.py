@@ -1,6 +1,7 @@
 import logging
 from js_kits.except_kits.except_kits import FastapiResult
-from apps.domain.entities.membership_order import MembershipOrderStatus
+
+from apps.domain.entities.order_base import OrderStatus
 from apps.domain.repo.repo_membership_order import MembershipOrderRepository
 from apps.domain.repo.repo_user_membership import UserMembershipRepository
 from apps.domain.entities.user_membership import UserMembershipEntity
@@ -38,11 +39,11 @@ class HandleMembershipPayCallback:
             order = order_list[0]
 
             # 检查订单状态
-            if order.status == MembershipOrderStatus.Paid.value:
+            if order.status == OrderStatus.Paid.value:
                 logger.info(f"订单已支付: {out_trade_no}")
                 return {'code': 'SUCCESS', 'message': '订单已处理'}
 
-            if order.status != MembershipOrderStatus.UnPaid.value:
+            if order.status != OrderStatus.Ordered.value:
                 logger.error(f"订单状态异常: {out_trade_no}, status: {order.status}")
                 return {'code': 'FAIL', 'message': '订单状态异常'}
 

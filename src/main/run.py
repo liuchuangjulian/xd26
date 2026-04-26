@@ -22,13 +22,13 @@ def web_app():
     from apps.domain.orm_user import start_mappers as mapper_user
     from apps.domain.orm_shop import start_mappers as mapper_shop
     from apps.domain.orm_area import start_mappers as mapper_area
-    from apps.domain.orm_redemption import start_mappers as mapper_redemption
+    # from apps.domain.orm_redemption import start_mappers as mapper_redemption
     from apps.domain.orm_config import start_mappers as mapper_config
 
     mapper_shop()
     mapper_user()
     mapper_area()
-    mapper_redemption()
+    # mapper_redemption()
     mapper_config()
     set_logging(logger, stream_level=os.getenv("LOG_LEVEL"))
     app = create_fastapi_app(setup_dependency_injection(), do_ini)

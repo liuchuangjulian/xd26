@@ -6,7 +6,8 @@ from string import ascii_letters, digits
 from datetime import datetime as dt
 from wechatpayv3 import WeChatPayType
 from js_kits.except_kits.except_kits import FastapiResult, ClientError
-from apps.domain.entities.membership_order import MembershipOrderEntity, MembershipOrderStatus
+from apps.domain.entities.membership_order import MembershipOrderEntity
+from apps.domain.entities.order_base import OrderStatus
 from apps.domain.repo.repo_membership_order import MembershipOrderRepository
 from apps.domain.repo.repo_user_membership import UserMembershipRepository
 from apps.domain.repo.repo_membership import MembershipRepository
@@ -58,7 +59,7 @@ class CreateMembershipOrder:
         # 检查是否有未支付的订单
         _, unpaid_orders = await self.membership_order_repo.get_list(
             session,
-            equal_maps={"uid": user.id, "membership_id": membership.id, "status": MembershipOrderStatus.UnPaid.value},
+            equal_maps={"uid": user.id, "membership_id": membership.id, "status": OrderStatus.Ordered.value},
             with_total=False
         )
         if unpaid_orders:
@@ -69,7 +70,7 @@ class CreateMembershipOrder:
                 return latest_order
             else:
                 # 取消旧订单
-                latest_order.status = MembershipOrderStatus.Cancelled.value
+                latest_order.status = OrderStatus.SystemCancelled.value
                 await self.membership_order_repo.add(session, latest_order)
         return None
 
